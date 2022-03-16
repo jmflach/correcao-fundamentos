@@ -60,15 +60,21 @@ python3 struct-transparent.py $newfilename
 
 #python3 remove-img-tests.py $newfilename
 
+tests_str=';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;                                     XXX TESTES INSERIDOS XXX                                     ;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;'
+
+echo "$tests_str" >> $newfilename
+
 first_line=$(head -1 $tvar)
 case $first_line in
   (*";; The first three lines of this file were inserted by DrRacket. They record metadata"*)
-		echo "entrou primeiro case"
      sed '1,3d' $tvar >> $newfilename
      ;;
   (*)
-		echo "entrou segundo case"
      cat $tvar >> $newfilename
 esac
+
+echo "(test)" >> $newfilename
 
 echo "Testes inseridos $filename"
