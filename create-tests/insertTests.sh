@@ -6,13 +6,15 @@ filename="${1%.*}"
 newfilename="$filename-WithTests.rkt"
 imgfilename="$(basename $filename)-Images.png"
 
-/usr/bin/racket wxme_converter.rkt $1 > $newfilename
+racket_path='/usr/bin/racket'
+
+$racket_path wxme_converter.rkt $1 > $newfilename
 
 echo "Inserindo testes no arquivo $filename"
 
 tvar="$testfilename.txt"
 if [ "$extension" = "rkt" ] || [ "$extension" = "scm" ]; then
-	/usr/bin/racket wxme_converter.rkt $2 > $tvar
+	$racket_path wxme_converter.rkt $2 > $tvar
 else
 	tvar=$2
 fi
