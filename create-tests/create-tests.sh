@@ -23,13 +23,13 @@ echo $SCRIPTPATH
 cd $SCRIPTPATH
 
 echo "Criando testes para gabarito"
-./insertTests.sh "$gabarito" "$test_file"
+./insert-tests.sh "$gabarito" "$test_file"
 mv "${gabarito%%.*}"*WithTests* $folder/aaa-gabarito-aaa.rkt
 
 for file in $original_files/*;
 do
     echo "Criando testes para $file"
-    ./insertTests.sh "$file" "$test_file"
+    ./insert-tests.sh "$file" "$test_file"
 done
 
 

@@ -42,7 +42,7 @@ main() {
       echo ""
 
       # This script will store the question in a file called racket_question.rkt
-      "$SCRIPTPATH"/show_racket_question.sh ${files[$n]} $QUESTION $UP "$QUESTION_FILE"
+      "$SCRIPTPATH"/show-racket-question.sh ${files[$n]} $QUESTION $UP "$QUESTION_FILE"
       pygmentize -f terminal16m -O style=friendly -l racket "$QUESTION_FILE"
 
       echo ""

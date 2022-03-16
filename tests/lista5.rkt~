@@ -1,0 +1,314 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-reader.ss" "lang")((modname lista5) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp")) #f)))
+;; Nome:
+
+;; ==========================================================
+;; DEFINIÇÃO DE DADOS E FUNÇÕES PARA UTILIZAREM NESTA LISTA
+;; ==========================================================
+
+(define-struct carta (naipe valor))
+;; Um elemento do conjunto Carta é
+;;   (make-carta-comum n v)     onde
+;;   n : String, é o naipe da carta, que pode ser "copas", "ouros", "espadas" ou "paus"
+;;   v : Número, é o valor da carta, que pode ser qualquer inteiro entre 1 e 10
+
+(define CARTA-NULA (make-carta "nenhum" 0))
+
+
+;; soma15?: Carta Carta -> Booleano
+;; obj: dadas 2 cartas, verifica se o valor delas somado é 15.
+;; ex:
+;;  (soma15? $CARTA3O $CARTA5C) -> #false
+;;  (soma15? $CARTA10O $CARTA5C) -> #true)
+;;  (soma15? $CARTA5C $CARTA10O) -> #true)
+;;  (soma15? $CARTA7E $CARTA8E) -> #true)
+
+(define (soma15? c1 c2)
+  (= 15 (+ (carta-valor c1) (carta-valor c2))))
+
+(check-expect (soma15? (make-carta "ouros" 3) (make-carta "copas" 5)) #false)
+(check-expect (soma15? (make-carta "ouros" 10) (make-carta "copas" 5)) #true)
+(check-expect (soma15? (make-carta "copas" 5) (make-carta "ouros" 10)) #true)
+(check-expect (soma15? (make-carta "espadas" 7) (make-carta "espadas" 8)) #true)
+
+
+
+;; ==========================================================
+;; QUESTÃO 1
+;; ==========================================================
+
+;; Uma Mão é ou:
+;; 1 - empty (lista vazia) ou
+;; 2 - (cons c  m), onde:
+;;     c: Carta e
+;;     m: Mão
+
+;; Uma Mesa é ou:
+;; 1 - empty (lista vazia) ou
+;; 2 - (cons c  m), onde:
+;;     c: Carta e
+;;     m: Mesa
+
+(define CARTA3O (make-carta "ouros" 3))
+(define CARTA5C (make-carta "copas" 5))
+(define CARTA1P (make-carta "paus" 1))
+(define CARTA3P (make-carta "paus" 3))
+(define CARTA3C (make-carta "copas" 3))
+(define CARTA10O (make-carta "ouros" 10))
+(define CARTA7O (make-carta "ouros" 7))
+(define CARTA7E (make-carta "espadas" 7))
+(define CARTA8E (make-carta "espadas" 8))
+(define CARTA3E (make-carta "espadas" 3))
+
+(define MÃO1 (list CARTA7O CARTA3P CARTA-NULA))
+(define MÃO2 (list CARTA1P CARTA3C CARTA5C))
+(define MÃO3 (list CARTA3O CARTA5C CARTA1P CARTA3P CARTA3C CARTA10O CARTA7O CARTA7E CARTA8E CARTA3E))
+
+(define MESA1 (list CARTA5C CARTA3C  CARTA1P CARTA3O)) ;; escova com  CARTA3P
+(define MESA2 (list CARTA3P CARTA7O CARTA10O))
+(define MESA3 (list CARTA5C CARTA3C CARTA1P CARTA3O CARTA3O CARTA1P))
+
+;; ===========================================================
+;; QUESTÃO 2
+;; ===========================================================
+
+;; soma15: Carta Mesa -> Carta
+;; obj: dada uma carta e uma mesa, retorna a carta da mesa que soma 15 com a carta dada
+;; ex:
+;;  (soma15 $CARTA5C $MESA1) -> CARTA-NULA
+;;  (soma15 $CARTA5C $MESA2) -> $CARTA10O
+
+(define (soma15 carta mesa)
+  (cond
+       [(empty? mesa) CARTA-NULA]
+       [(soma15? carta (first mesa)) (first mesa)]
+       [else (soma15 carta (rest mesa))]))
+
+(check-expect (soma15 CARTA5C MESA1) CARTA-NULA)
+(check-expect (soma15 CARTA5C MESA2) CARTA10O)
+
+;; ============================================================
+;; QUESTÃO 3
+;; ============================================================
+
+;; soma-mesa: Mesa -> Número
+;; obj: dada uma mesa, retorna a soma de todas as cartas
+;; ex:
+;;  (soma-mesa empty) -> 0
+;;  (soma-mesa $MESA1) -> 12
+;;  (soma-mesa $MESA2) -> 20
+
+(define (soma-mesa mesa)
+  (cond
+    [(empty? mesa) 0]
+    [else (+ (carta-valor (first mesa)) (soma-mesa (rest mesa)))]))
+
+(check-expect (soma-mesa empty) 0)
+(check-expect (soma-mesa MESA1) 12)
+(check-expect (soma-mesa MESA2) 20)
+
+
+
+;; escova?: Carta Mesa -> Booleano
+;; obj: dada uma carta e uma mesa, verifica se é possível fazer uma Escova
+;; ex:
+;; (escova? $CARTA3P $MESA1) -> #true
+;; (escova? $CARTA5C $MESA2) -> #false
+
+(define (escova? carta mesa)
+  (= 15 (+ (carta-valor carta) (soma-mesa mesa))))
+
+(check-expect (escova? CARTA3P MESA1) #true)
+(check-expect (escova? CARTA5C MESA2) #false)
+
+;; =============================================================
+;; QUESTÃO 4
+;; =============================================================
+
+;; jogada-escova: Mão Mesa -> String
+;; obj: dada uma mão e uma mesa, verifica se é possível fazer Escova com alguma carta da mão
+;; ex:
+;;  (jogada-escova $MÃO1 $MESA1) -> "Escova!"
+;;  (jogada-escova $MÃO2 $MESA2) -> "Não faço escova."
+
+(define (jogada-escova mao mesa)
+  (cond
+    [(empty? mao) "Não faço escova."]
+    [(escova? (first mao) mesa) "Escova!"]
+    [else (jogada-escova (rest mao) mesa)]))
+
+(check-expect (jogada-escova MÃO1 MESA1) "Escova!")
+(check-expect (jogada-escova MÃO2 MESA2) "Não faço escova.")
+
+;; ==============================================================
+;; QUESTÃO 5
+;; ==============================================================
+
+(define-struct jogada (carta msg))
+;; Um elemento do conjunto Jogada é
+;;   (make-jogada c m)     onde
+;;   c : Carta, é a carta selecionada na jogada
+;;   m : String, é uma mensagem, que pode ser "Escova!" ou "Não faço escova."
+
+;; seleciona-escova: Mão Mesa -> Carta
+;; obj: dados uma mão e uma mesa, sabendo que uma carta da mão faz escova com a mesa, retorna esta carta
+;; ex:
+;;  (seleciona-escova $MÃO1 $MESA1) -> $CARTA3P
+;;  (seleciona-escova $MÃO2 $MESA2) -> CARTA-NULA
+
+(define (seleciona-escova mao mesa)
+  (cond [(empty? mao) CARTA-NULA]
+        [(escova? (first mao) mesa) (first mao)]
+        [else (seleciona-escova (rest mao) mesa)]))
+
+(check-expect (seleciona-escova MÃO1 MESA1) CARTA3P)
+(check-expect (seleciona-escova MÃO2 MESA2) CARTA-NULA)
+
+;; seleciona-carta-valida: Mão -> Carta
+;; obj: dada uma mão, seleciona a primeira carta valida
+;; ex:
+;;  (seleciona-carta-valida $MÃO1) -> $CARTA7O
+;;  (seleciona-carta-valida $MÃO2) -> $CARTA1P
+
+(define (seleciona-carta-valida mao)
+  (cond [(empty? mao) CARTA-NULA] 
+        [(not (= 0 (carta-valor (first mao)))) (first mao)]
+        [else (seleciona-carta-valida (rest mao))]))
+
+(check-expect (seleciona-carta-valida MÃO1) CARTA7O)
+(check-expect (seleciona-carta-valida MÃO2) CARTA1P)
+
+;; seleciona-carta: Mão Mesa -> Jogada
+;; obj: dado uma mão e uma mesa, devolve a carta selecionada para jogar, juntamente com uma mensagem
+;; ex:
+;;  (seleciona-carta $MÃO1 $MESA1) -> (make-jogada $CARTA3P "Escova!")
+;;  (seleciona-carta $MÃO2 $MESA2) -> (make-jogada $CARTA1P "Não faço escova.")
+
+(define (seleciona-carta mao mesa)
+  (cond [(string=? (jogada-escova mao mesa) "Escova!") (make-jogada (seleciona-escova mao mesa) (jogada-escova mao mesa))]
+        [else (make-jogada (seleciona-carta-valida mao) (jogada-escova mao mesa))]))
+
+(check-expect (seleciona-carta MÃO1 MESA1) (make-jogada CARTA3P "Escova!"))
+(check-expect (seleciona-carta MÃO2 MESA2) (make-jogada CARTA1P "Não faço escova."))
+
+;; ==============================================================
+;; DEFINIÇÃO DE FUNÇÕES PARA DESENHAR UMA CARTA
+;; ==============================================================
+
+;; rectangle-round: Número Número String Número -> Imagem
+;; obj: dado uma cor, uma altura e largura e uma escala, retorna um retângulo de cantos arredondados.
+(define (rectangle-round largura altura cor escala)
+  (scale escala
+         (above (beside (crop 0 0 5 5 (circle 5 "solid" cor)) (rectangle (- largura 10) 5 "solid" cor) (crop 5 0 5 5 (circle 5 "solid" cor)))
+                (rectangle largura (- altura 10) "solid" cor)
+                (beside (crop 0 5 5 5 (circle 5 "solid" cor)) (rectangle (- largura 10) 5 "solid" cor) (crop 5 5 5 5 (circle 5 "solid" cor))))))
+
+;; carta-frame: String -> Imagem
+;; obj: dado uma cor, retorna o formato base de uma carta.
+(define (carta-frame cor)
+  (overlay (rectangle 65 90 "outline" cor) (rectangle-round 110 160 "white" 1) (rectangle-round 125 175 cor 1) (rectangle-round 130 180 "white" 1)))
+
+;; coracao: String -> Imagem
+;; obj: dado uma cor, retorna a imagem de um coração.
+(define (coracao cor)
+  (overlay/align/offset "center" "top" (overlay/offset (circle 50 "solid" cor) 80 0 (circle 50 "solid" cor)) 0 75 (rotate 180 (isosceles-triangle 130 80 "solid" cor))))
+
+;; circulos: String -> Imagem
+;; obj: dado uma cor, retorna a imagem de três circulos, como no naipe de paus do baralho.
+(define (circulos cor) (overlay/align/offset "center" "top" (overlay/offset (circle 50 "solid" cor) 80 0 (circle 50 "solid" cor)) 0 75 (circle 50 "solid" cor)))
+
+;; logo-ouros: Número String -> Imagem
+;; obj: dado uma escala e uma cor, retorna o logo de ouros.
+(define (logo-ouros escala cor) (scale escala (rhombus 120 60 "solid" cor)))
+
+;; logo-copas Número String -> Imagem
+;; obj: dado uma escala e uma cor, retorna o logo de copas.
+(define (logo-copas escala cor) (scale escala (coracao cor)))
+
+;; logo-espadas Número String -> Imagem
+;; obj: dado uma escala e uma cor, retorna o logo de espadas.
+(define (logo-espadas escala cor) (scale escala (overlay/align/offset "center" "bottom" (rotate 180 (coracao cor)) 0 30 (isosceles-triangle 80 80 "solid" cor))))
+
+;; logo-paus: Número String -> Imagem
+;; obj: dado uma escala e uma cor, retorna o logo de paus.
+(define (logo-paus escala cor) (scale escala (overlay/align/offset "center" "bottom" (rotate 180 (circulos cor)) 0 30 (isosceles-triangle 80 80 "solid" cor))))
+
+(define (desenha-logo n escala cor)
+  (cond [(string=? n "ouros") (logo-ouros escala cor)]
+        [(string=? n "espadas") (logo-espadas escala cor)]
+        [(string=? n "paus") (logo-paus escala cor)]
+        [(string=? n "copas") (logo-copas escala cor)]
+        [else empty-image]))
+
+;; desenha-carta: Carta -> Imagem
+;; obj: dada uma carta, gera uma visualização desta carta. Se a carta for nula, gerar a imagem vazia.
+(define (desenha-carta c)
+  (desenha-carta-escala c 0.5))
+
+;; desenha-carta-escala: Carta Número -> Imagem
+;; obj: dada uma carta e uma escala, gera uma visualização desta carta. Se a carta for nula, gerar a imagem vazia.
+(define (desenha-carta-escala c escala)
+  (cond [(string=? "paus" (carta-naipe c)) (desenha-carta-cor c "Cornflower Blue" escala)]
+        [(string=? "espadas" (carta-naipe c)) (desenha-carta-cor c "Cornflower Blue" escala)]
+        [(string=? "ouros" (carta-naipe c)) (desenha-carta-cor c "Crimson" escala)]
+        [(string=? "copas" (carta-naipe c)) (desenha-carta-cor c "Crimson" escala)]
+        [else empty-image]))
+
+;; desenha-carta-escala: Carta Número -> Imagem
+;; obj: dada uma carta, uma cor e uma escala, gera uma visualização desta carta. Se a carta for nula, gerar a imagem vazia.
+(define (desenha-carta-cor carta cor escala)
+  (scale escala (overlay/align "middle" "center"
+                               (desenha-logo (carta-naipe carta) 0.2 cor)
+                               (overlay/align/offset "right" "top"
+                                                     (text (number->string (carta-valor carta)) 25 cor)
+                                                     20 -20
+                                                     (overlay/align/offset "left" "bottom"
+                                                                           (rotate 180 (text (number->string (carta-valor carta)) 25 cor))
+                                                                           -20 20
+                                                                           (carta-frame cor))))))
+
+;; ==============================================================
+;; QUESTÃO EXTRA
+;; ==============================================================
+
+
+;; mostra-jogada: Mão Mesa -> Imagem
+;; obj: dada uma mão e uma mesa, mostra a jogada a fazer, ou seja, uma imagem com a mão,
+;; a carta selecionada e se fez escova ou não.
+
+(define (mostra-jogada mao mesa)
+  (overlay
+   (above
+    (beside (text "Mão: " 20  "white") (desenha-mao mao))
+    (text "" 20  "white")
+    (beside (text "Mesa: " 20  "white") (desenha-mesa mesa))
+    (text "" 20  "white")
+    (cond
+      [(string=? "Escova!" (jogada-escova mao mesa))
+       (beside 
+        (text "   Escova com carta: " 20 "White")
+        (desenha-carta (seleciona-escova mao mesa)))]
+      [else (text "Não faço escova." 20 "White")]))
+   (rectangle-round (+ 200 (* 100 (max (length mao) (length mesa)))) 400 "Brown" 1)))
+
+;; desenha-mão: Mão -> Imagem
+;; Dada uma mão, gera uma visualização para esta mão.
+
+(define (desenha-mao m)
+  (cond [(empty? m) empty-image]
+        [else
+         (beside
+          (desenha-carta (first m))
+          (desenha-mao (rest m)))]))
+
+;; desenha-mesa: Mesa -> Imagem
+;; Dada uma mesa, gera uma visualização para esta mesa.
+
+(define (desenha-mesa m)
+  (cond [(empty? m) empty-image]
+        [else
+          (beside
+           (desenha-carta (first m))
+           (desenha-mesa (rest m)))]))
+
