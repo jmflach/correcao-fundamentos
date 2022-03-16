@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Incluído pelo script insertTests.sh ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
+(require racket/base) 
+(require racket/struct) 
+(require test-engine/racket-tests) 
+
+;; Namespace para determinar se funções foram definidas: 
+
+(define-namespace-anchor a) 
+(define ns (namespace-anchor->namespace a)) 
+
+;; Arquivo de imagens de saida: 
+
+(define $ARQUIVO lista5-Images.png) 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
