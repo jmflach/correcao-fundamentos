@@ -1,11 +1,12 @@
-#!/bin/zsh
+#!/bin/bash
 
 extension="${2##*.}"
 testfilename="${2%.*}"
 filename="${1%.*}"
 newfilename="$filename-WithTests.rkt"
 imgfilename="$(basename $filename)-Images.png"
-/usr/bin/racket  wxme_converter.rkt $1 > $newfilename
+
+/usr/bin/racket wxme_converter.rkt $1 > $newfilename
 
 echo "Inserindo testes no arquivo $filename"
 

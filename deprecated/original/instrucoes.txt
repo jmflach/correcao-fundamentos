@@ -1,0 +1,20 @@
+Instruções para inserir os testes:
+
+>>Entrada: 
+	* diretório contendo todos os exercícios dos alunos DIR-listaN
+	* arquivo com os testes   listaN-testes.rkt
+	* programa insertTests.sh
+	* programa wxme_converter.rkt
+
+>>Processo: na linha de comando, digitar
+
+ for file in ./DIR-listaN/*; do 
+     ./insertTests.sh "$file" ./listaN-testes.rkt 
+
+>>Saída:
+	* para cada arquivo listaN-AlunoX.rkt em DIR-listaN será gerado um arquivo listaN-AlunoX-WithTests.rkt
+
+Daí é so abrir cada arquivo e clicar Run. 
+
+O programa insertTests.sh  insere os testes e mais algumas linhas no início  para incluir o pacote necessário para gerenciar namespaces (racket/base), além de algumas linhas para inserir no arquivo do aluno um nome para o 
+arquivo com as imagens a serem geradas, se for o caso da lista gerar imagens (nomeDoArquivoDoAluno-Images.png) - na lista2 eu optei por não gravar as imagens em um arquivo mas apenas mostrar. Esse  programa espera 2 argumentos: o arquivo do aluno e o arquivo com os testes, e  gera o arquivo nomeDoArquivoDoAluno-WithTests.rkt. Quando este arquivo executar, os testes serão executados e o arquivo com as imagens gerado. Voces precisam ajustar o programa para inserir o path correto do racket nos seus sistemas. O programa insertTests usa o programa wxme_converter.rkt, que transforma um arquivo rkt possivelmente com imagens em um em formato texto, removendo, portanto, as imagens. Por isso, se o aluno fez algum teste usando check-expect e colou uma imagem no resultado, vai dar erro no teste.
