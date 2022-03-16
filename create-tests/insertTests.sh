@@ -17,28 +17,31 @@ else
 	tvar=$2
 fi
 
-config=';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Incluído pelo script insertTests.sh ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; \
-\
-(require racket/base) \
-(require racket/struct) \
-(require test-engine/racket-tests) \
-\
-;; Namespace para determinar se funções foram definidas: \
-\
-(define-namespace-anchor a) \
-(define ns (namespace-anchor->namespace a)) \
-\
-;; Arquivo de imagens de saida: \
-\
-(define $ARQUIVO '$imgfilename') \
-\
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; \n'
+config=';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Incluído pelo script insertTests.sh ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-sed -i "1 i $config " $newfilename
+(require racket/base)
+(require racket/struct)
+(require test-engine/racket-tests)
 
-rkt_config=';; The first three lines of this file were inserted by DrRacket. They record metadata \
-;; about the language level of this file in a form that our tools can easily process. \
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname b) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp")) #f))) \
+;; Namespace para determinar se funções foram definidas:
+
+(define-namespace-anchor a)
+(define ns (namespace-anchor->namespace a))
+
+;; Arquivo de imagens de saida:
+
+(define $ARQUIVO '$imgfilename')
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+'
+
+#sed -i "1 i $config " $newfilename
+echo "$config" | cat - $newfilename > temp && mv temp $newfilename
+
+
+rkt_config=';; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname b) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp")) #f)))
 '
 
 first_line=$(head -1 $newfilename)
@@ -48,7 +51,7 @@ case $first_line in
      ;;
   (*)
 		echo "Arquivo not RKT"
-		sed -i "1 i $rkt_config " $newfilename
+		echo -e "$rkt_config" | cat - $newfilename > temp && mv temp $newfilename
 esac
 
 python3 struct-transparent.py $newfilename
