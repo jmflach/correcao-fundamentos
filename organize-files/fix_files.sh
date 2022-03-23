@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd "envios"
+#cd "envios"
 
 #mv lista4 lista4.rkt
 

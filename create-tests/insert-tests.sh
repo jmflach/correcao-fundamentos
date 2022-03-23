@@ -1,5 +1,8 @@
 #!/bin/bash
 
+SCRIPT=`realpath $0`
+SCRIPTPATH=`dirname "$SCRIPT"`
+
 extension="${2##*.}"
 testfilename="${2%.*}"
 filename="${1%.*}"
@@ -8,13 +11,13 @@ imgfilename="$(basename $filename)-Images.png"
 
 racket_path='/usr/bin/racket'
 
-$racket_path wxme-converter.rkt $1 > $newfilename
+$racket_path "$SCRIPTPATH"/wxme-converter.rkt $1 > $newfilename
 
 echo "Inserindo testes no arquivo $filename"
 
 tvar="$testfilename.txt"
 if [ "$extension" = "rkt" ] || [ "$extension" = "scm" ]; then
-	$racket_path wxme-converter.rkt $2 > $tvar
+	$racket_path "$SCRIPTPATH"/wxme-converter.rkt $2 > $tvar
 else
 	tvar=$2
 fi
@@ -56,7 +59,7 @@ case $first_line in
 		echo -e "$rkt_config" | cat - $newfilename > temp && mv temp $newfilename
 esac
 
-python3 struct-transparent.py $newfilename
+python3 "$SCRIPTPATH"/struct-transparent.py $newfilename
 
 #python3 remove-img-tests.py $newfilename
 

@@ -7,33 +7,38 @@
 # $4 = file that contains the correct answers
 
 test_file=`realpath $1`
-folder=`realpath $2`
-original_files=`realpath $3`
-gabarito=`realpath $4`
+#folder=`realpath $2`
+original_files=`realpath $2`
+gabarito=`realpath $3`
 SCRIPT=`realpath $0`
 SCRIPTPATH=`dirname "$SCRIPT"`
+TMP="$original_files/../tmp"
 
+filename=$( basename $1 )
+folder=`realpath "$SCRIPTPATH"/../../testes/"${filename%.*}"`
 
-rm -r $folder
+echo "$folder"
+
+#rm -r $folder
 mkdir $folder
+mkdir $TMP
 
 echo $SCRIPT
 echo $SCRIPTPATH
 
-cd $SCRIPTPATH
 
 echo "Criando testes para gabarito"
-./insert-tests.sh "$gabarito" "$test_file"
+"$SCRIPTPATH"/insert-tests.sh "$gabarito" "$test_file"
 mv "${gabarito%%.*}"*WithTests* $folder/aaa-gabarito-aaa.rkt
 
-for file in $original_files/*;
-do
-    echo "Criando testes para $file"
-    ./insert-tests.sh "$file" "$test_file"
-done
+#for file in $original_files/*;
+#do
+#    echo "Criando testes para $file"
+#    ./insert-tests.sh "$file" "$test_file"
+#done
 
 
-for file in $original_files/*WithTests*;
-do
-    mv $file $folder
-done
+#for file in $original_files/*WithTests*;
+#do
+#    mv $file $folder
+#done
