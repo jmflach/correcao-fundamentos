@@ -1,36 +1,36 @@
 #!/bin/bash
 
 # Dado um diretório que contém os arquivos dos alunos em pastas, copia todos para o segundo diretorio
+SUB_DIR=`realpath $1`
+
+echo "****************************************"
+echo "$SUB_DIR"
 
 # Copiar todas as pastas para uma outra pasta
-rm -rf "envios-originais"
-mkdir "envios-originais"
+rm -rf "$SUB_DIR"/"envios-originais"
+mkdir "$SUB_DIR"/"envios-originais"
 
 # Descompactar o arquivo do Moodle
-unzip AGL06* -d ./envios-originais
+unzip "$SUB_DIR"/AGL06* -d "$SUB_DIR"/envios-originais
 
 #cp *assignsubmission* envios
-rm -rf "envios"
-mkdir "envios"
-cd "envios-originais"
+rm -rf "$SUB_DIR"/"envios"
+mkdir "$SUB_DIR"/"envios"
+#cd "envios-originais"
 
-for dir in *;
+for dir in "$SUB_DIR"/envios_originais/*;
 do
     echo $dir
     cd "$dir"
-    cp * ../../envios/
+    cp * "$SUB_DIR"/"envios"
     #echo $PWD
     cd ..
 done
 
-cd ..
-
 echo $PWD
 
-cd envios
 echo $PWD
-find . -name "* *" -type f | rename 's/ /_/g'
+find "$SUB_DIR"/"envios" -name "* *" -type f | rename 's/ /_/g'
 
-cd ..
 
-./fix_files.sh
+./fix-files.sh

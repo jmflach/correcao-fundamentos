@@ -30,7 +30,15 @@ Scripts antigos guardados para referência.
 
 2 - Clone ou baixe este projeto para dentro da pasta criada.
 
-2 - Baixar os envios do Moodle, em um arquivo zip.
+3 - Execute o comando "./correcao-fundamentos/correcao.sh --init .". Serão criadas 3 pastas: submissoes, testes e gabarito
 
-3 - 
+4 - Coloque todos os arquivos que achar pertinente (pdf da lista, resolução, template, testes a serem inseridos) na pasta gabarito
+
+5 - Baixe os envios do Moodle, em um arquivo zip. Copie para a pasta submissoes.
+
+6 - Rode o script "./correcao-fundamentos/correcao.sh --organize-files ./submissoes". Esse script espera que o zip com as submissões já esteja na pasta submissoes.
+    Obs.: o script que faz a organização dos arquivos (correcao-fundamentos/organize-files/organize-files.sh) chama outro script (correcao-fundamentos/organize-files/fix-files.sh) que arruma alguns arquivos que eventualmente podem ter problemas, como: arquivo sem extensão, arquivo que outros scripts não conseguem ler (formatação diferente de UTF-8), etc. Porém essa tarefa é manual e, para cada arquivo que apresentar problema, deve-se adicionar neste script comandos para resolver.
+    Obs: Este script também verifica arquivos que contém espaço no nome e substitui cada espaço por "_ESPACO_" para ficar mais fácil detectar esses erros.
+
+7 - 
 
