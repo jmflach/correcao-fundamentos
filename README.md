@@ -23,3 +23,14 @@ Scripts utilizados para rodar os programas diretamente no terminal. Use somente 
 ## deprecated
 
 Scripts antigos guardados para referência.
+
+# Como corrigir
+
+1 - Criar uma pasta em seu computador, chamada "correcao-listaX"
+
+2 - Clone ou baixe este projeto para dentro da pasta criada.
+
+2 - Baixar os envios do Moodle, em um arquivo zip.
+
+3 - 
+
