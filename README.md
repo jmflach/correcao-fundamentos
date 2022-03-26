@@ -52,6 +52,6 @@ Esse script espera que o zip com as submissões já esteja na pasta submissoes. 
 
 <!---Obs.: o script que faz a organização dos arquivos (correcao-fundamentos/organize-files/organize-files.sh) chama outro script (correcao-fundamentos/organize-files/fix-files.sh) que arruma alguns arquivos que eventualmente podem ter problemas, como: arquivo sem extensão, arquivo que outros scripts não conseguem ler (formatação diferente de UTF-8), etc. Porém essa tarefa é manual e, para cada arquivo que apresentar problema, deve-se adicionar neste script comandos para resolver.--->
 
-Obs: Este script também verifica arquivos que contém espaço no nome e substitui cada espaço por "_ESPACO_" para ficar mais fácil detectar esses erros.
+Obs: Este script também verifica arquivos que contém espaço no nome e substitui cada espaço pela string "\_ESPACO\_" para ficar mais fácil detectar esses erros.
 
 7 -
