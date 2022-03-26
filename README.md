@@ -54,4 +54,21 @@ Esse script espera que o zip com as submissões já esteja na pasta submissoes. 
 
 Obs: Este script também verifica arquivos que contém espaço no nome e substitui cada espaço pela string "\_ESPACO\_" para ficar mais fácil detectar esses erros.
 
-7 -
+7 - Agora vamos inserir os testes nos arquivos dos alunos. Neste passo, para cada submissão da pasta `envio`, serão adicionados os testes que estarão em outro arquivo separado, que deverá ser obtido com o professor responsável pela lista. Rode o script:
+
+```
+./correcao-fundamentos/correcao.sh --create-tests <test-file> submissoes/envios <gabarito>
+```
+
+É necessário passar o gabarito também como parâmetro, para que os testes sejam inseridos no gabarito também. É melhor assertar que todos os testes passam sem erros no gabarito.
+
+
+
+
+
+
+
+# Colaboradores
+
+* Leila Ribeiro
+* João Marcos Flach

@@ -22,6 +22,21 @@ else
 	tvar=$2
 fi
 
+rkt_config=';; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname b) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp")) #f)))
+'
+
+first_line=$(head -1 $newfilename)
+case $first_line in
+  (*";; The first three lines of this file were inserted by DrRacket. They record metadata"*)
+		echo "Aquivo RKT"
+     ;;
+  (*)
+		echo "Arquivo not RKT"
+		echo -e "$rkt_config" | cat - $newfilename > temp && mv temp $newfilename
+esac
+
 config=';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Incluído pelo script insertTests.sh ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require racket/base)
@@ -42,22 +57,6 @@ config=';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Incluído pelo script insertTes
 
 #sed -i "1 i $config " $newfilename
 echo "$config" | cat - $newfilename > temp && mv temp $newfilename
-
-
-rkt_config=';; The first three lines of this file were inserted by DrRacket. They record metadata
-;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname b) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp")) #f)))
-'
-
-first_line=$(head -1 $newfilename)
-case $first_line in
-  (*";; The first three lines of this file were inserted by DrRacket. They record metadata"*)
-		echo "Aquivo RKT"
-     ;;
-  (*)
-		echo "Arquivo not RKT"
-		echo -e "$rkt_config" | cat - $newfilename > temp && mv temp $newfilename
-esac
 
 python3 "$SCRIPTPATH"/struct-transparent.py $newfilename
 

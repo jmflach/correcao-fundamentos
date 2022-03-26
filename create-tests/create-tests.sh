@@ -21,7 +21,9 @@ echo "$folder"
 
 #rm -r $folder
 mkdir $folder
-mkdir $TMP
+
+rm -rf $TMP
+cp -r "$original_files" "$TMP"
 
 echo $SCRIPT
 echo $SCRIPTPATH
@@ -31,14 +33,14 @@ echo "Criando testes para gabarito"
 "$SCRIPTPATH"/insert-tests.sh "$gabarito" "$test_file"
 mv "${gabarito%%.*}"*WithTests* $folder/aaa-gabarito-aaa.rkt
 
-#for file in $original_files/*;
-#do
-#    echo "Criando testes para $file"
-#    ./insert-tests.sh "$file" "$test_file"
-#done
+for file in $TMP/*;
+do
+    echo "Criando testes para $file"
+    "$SCRIPTPATH"/insert-tests.sh "$file" "$test_file"
+done
 
 
-#for file in $original_files/*WithTests*;
-#do
-#    mv $file $folder
-#done
+for file in $TMP/*WithTests*;
+do
+    mv $file $folder
+done
