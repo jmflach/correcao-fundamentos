@@ -83,6 +83,18 @@ tests_str=';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 echo "$tests_str" >> $newfilename
 
+last_line=$(grep . $tvar | tail -1)
+case $last_line in
+  (*"(test)"*)
+     echo "" >> $newfilename
+     ;;
+  (*)
+     echo "(test)" >> $newfilename
+esac
+
+
+
+
 first_line=$(head -1 $tvar)
 case $first_line in
   (*";; The first three lines of this file were inserted by DrRacket. They record metadata"*)
@@ -92,6 +104,5 @@ case $first_line in
      cat $tvar >> $newfilename
 esac
 
-echo "(test)" >> $newfilename
 
 #echo "Testes inseridos $filename"
