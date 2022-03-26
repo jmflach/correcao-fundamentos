@@ -2,11 +2,19 @@
 
 Esse projeto tem a finalidade de ajudar na correção das listas de exercícios da disciplina de Fundamentos de Algoritmos da UFRGS.
 
+# Pré-requisitos
+
+* Sistema operacional UNIX (linux ou mac). Havia algumas funcionalidades que não funcionavam no mac, mas está sendo arrumado. Se encontrar algum erro, envie um e-mail para jmflach@inf.ufrgs.br.
+
+* Ter o `racket` instalado na máquina. Às vezes a versão disponível no respositório oficial das distros do linux é uma versão antiga. Você pode baixar a versão mais atualizada em https://download.racket-lang.org/
+
+* Ter o `python` instalado na máquina, juntamente com o pacote de expressões regulares `re`.
+
+* Alterar o caminho do `racket` no script `create-tests/insertTests.sh`, se necessário. Para saber o caminho, pode usar o comando `whereis racket` no terminal.
+
 # Uso
 
-A princípio, funciona em sistemas linux. Havia algumas funcionalidades que não funcionavam no mac, mas está sendo arrumado. Se encontrar algum erro, envie um e-mail para jmflach@inf.ufrgs.br.
 
-Importante: altere o caminho para o racket no script create-tests/insertTests.sh se necessário.
 
 Existem 3 pastas:
 
@@ -70,7 +78,7 @@ Possíveis problemas ao rodar este script:
 
 
 
-Importante: Sempre que houver alguma dúvida no programa do aluno, cheque a versão original, na pasta `envios-originais`, pois pode ser que o nosso script tenha modificado alguma coisa (nunca aconteceu, mas é melhor sempre conferir no original).
+Importante: Sempre que houver alguma dúvida no programa do aluno, cheque a versão original, na pasta `envios-originais`, pois pode ser que o nosso script tenha modificado alguma coisa (nunca aconteceu, mas é melhor sempre conferir no original). Caso isso tenha acontecido, por favor, comunique imediatamente o professor responsável, para que possamos resolver o problema.
 
 
 
