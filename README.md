@@ -54,6 +54,8 @@ Esse script espera que o zip com as submissões já esteja na pasta submissoes. 
 
 Obs: Este script também verifica arquivos que contém espaço no nome e substitui cada espaço pela string "\_ESPACO\_" para ficar mais fácil detectar esses erros.
 
+Neste momento você pode fazer a correção dos nomes dos arquivos.
+
 7 - Agora vamos inserir os testes nos arquivos dos alunos. Neste passo, para cada submissão da pasta `envio`, serão adicionados os testes que estarão em outro arquivo separado, que deverá ser obtido com o professor responsável pela lista. Rode o script:
 
 ```
@@ -62,8 +64,13 @@ Obs: Este script também verifica arquivos que contém espaço no nome e substit
 
 É necessário passar o gabarito também como parâmetro, para que os testes sejam inseridos no gabarito também. É melhor assertar que todos os testes passam sem erros no gabarito.
 
+Possíveis problemas ao rodar este script:
+
+* Algum arquivo pode não ser lido corretamente pelo script, pois está com uma codificação diferente de UTF-8. Caso isso aconteça, você deverá identificar o arquivo e mudar usa codificação para UTF-8. No linux, pode-se usar o comando `iconv` para isso.
 
 
+
+Importante: Sempre que houver alguma dúvida no programa do aluno, cheque a versão original, na pasta `envios-originais`, pois pode ser que o nosso script tenha modificado alguma coisa (nunca aconteceu, mas é melhor sempre conferir no original).
 
 
 
