@@ -44,7 +44,7 @@ Scripts antigos guardados para referência.--->
 ./correcao-fundamentos/correcao.sh --init .
 ```
 
-"Serão criadas 3 pastas dentro de `correcao-listaX`: `submissoes`, `testes` e `gabarito`.
+Serão criadas 3 pastas dentro de `correcao-listaX`: `submissoes`, `testes` e `gabarito`.
 
 4 - Coloque todos os arquivos que achar pertinente (pdf da lista, resolução, template, testes a serem inseridos) na pasta `gabarito`
 

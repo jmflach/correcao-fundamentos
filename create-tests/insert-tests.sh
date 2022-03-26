@@ -13,7 +13,7 @@ racket_path='/usr/bin/racket'
 
 $racket_path "$SCRIPTPATH"/wxme-converter.rkt $1 > $newfilename
 
-echo "Inserindo testes no arquivo $filename"
+#echo "Inserindo testes no arquivo $filename"
 
 tvar="$testfilename.txt"
 if [ "$extension" = "rkt" ] || [ "$extension" = "scm" ]; then
@@ -21,21 +21,6 @@ if [ "$extension" = "rkt" ] || [ "$extension" = "scm" ]; then
 else
 	tvar=$2
 fi
-
-rkt_config=';; The first three lines of this file were inserted by DrRacket. They record metadata
-;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname b) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp")) #f)))
-'
-
-first_line=$(head -1 $newfilename)
-case $first_line in
-  (*";; The first three lines of this file were inserted by DrRacket. They record metadata"*)
-		echo "Aquivo RKT"
-     ;;
-  (*)
-		echo "Arquivo not RKT"
-		echo -e "$rkt_config" | cat - $newfilename > temp && mv temp $newfilename
-esac
 
 config=';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Incluído pelo script insertTests.sh ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -50,13 +35,43 @@ config=';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Incluído pelo script insertTes
 
 ;; Arquivo de imagens de saida:
 
-(define $ARQUIVO '$imgfilename')
+(define $ARQUIVO "'$imgfilename'")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 '
 
 #sed -i "1 i $config " $newfilename
-echo "$config" | cat - $newfilename > temp && mv temp $newfilename
+
+
+
+rkt_config=';; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname b) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp")) #f)))
+'
+
+first_line=$(head -1 $newfilename)
+case $first_line in
+  (*";; The first three lines of this file were inserted by DrRacket. They record metadata"*)
+		#echo "Aquivo RKT"
+		head -3 $newfilename > temp-head
+		#echo "$config" >> temp
+
+		tail --lines=+4 $newfilename > temp-tail
+
+
+		echo "$config" | cat - temp-tail > temp && mv temp $newfilename
+
+		# Deixa a configuração do aluno
+		cat temp-head | cat - $newfilename > temp && mv temp $newfilename
+
+		# Substitui a configuração do racket do aluno pela padrão (linguagens e pacotes)
+		#echo -e "$rkt_config" | cat - $newfilename > temp && mv temp $newfilename
+     ;;
+  (*)
+		#echo "Arquivo not RKT"
+		echo "$config" | cat - $newfilename > temp && mv temp $newfilename
+		echo -e "$rkt_config" | cat - $newfilename > temp && mv temp $newfilename
+esac
 
 python3 "$SCRIPTPATH"/struct-transparent.py $newfilename
 
@@ -79,4 +94,4 @@ esac
 
 echo "(test)" >> $newfilename
 
-echo "Testes inseridos $filename"
+#echo "Testes inseridos $filename"

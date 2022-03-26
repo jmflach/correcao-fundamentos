@@ -8,6 +8,7 @@ PARAMS=""
 INIT=false
 ORG=false
 CREATE=false
+RUN=false
 
 while (( "$#" )); do
   case "$1" in
@@ -45,13 +46,15 @@ while (( "$#" )); do
       CREATE=true
       ;;
     --run)
-      if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
-        MY_FLAG_ARG=$2
-        shift 2
+      if [ -n "$2" ] && [ ${2:0:1} != "-" ] && [ -n "$3" ] && [ ${3:0:1} != "-" ]; then
+        QUESTION=$2
+        TESTS_FOLDER=$3
+        shift 3
       else
         echo "Erro: Estão faltando os argumentos para $1" >&2
         exit 1
       fi
+      RUN=true
       ;;
     -*|--*=) # unsupported flags
       echo "Erro: Comando não suportado: $1" >&2
@@ -87,4 +90,9 @@ if [ "$CREATE" = true ]; then
   echo "$ORG_FILES"
   echo "$GAB"
   "$SCRIPTPATH"/create-tests/create-tests.sh "$TEST_FILE" "$ORG_FILES" "$GAB"
+fi;
+
+if [ "$RUN" = true ]; then
+  echo "$TEST_FOLDER"
+  "$SCRIPTPATH"/run/run-code.sh "$QUESTION" "$TESTS_FOLDER"
 fi;

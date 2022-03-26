@@ -19,7 +19,7 @@ folder=`realpath "$SCRIPTPATH"/../../testes/"${filename%.*}"`
 
 echo "$folder"
 
-#rm -r $folder
+rm -rf $folder
 mkdir $folder
 
 rm -rf $TMP
@@ -35,7 +35,8 @@ mv "${gabarito%%.*}"*WithTests* $folder/aaa-gabarito-aaa.rkt
 
 for file in $TMP/*;
 do
-    echo "Criando testes para $file"
+    nome="$(basename $file)"
+    echo "Criando testes para $nome"
     "$SCRIPTPATH"/insert-tests.sh "$file" "$test_file"
 done
 

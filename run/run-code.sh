@@ -11,15 +11,15 @@ SCRIPT=`realpath $0`
 SCRIPTPATH=`dirname "$SCRIPT"`
 
 QUESTION=$1
-QUESTION_FOLDER="q$1"
+QUESTION_FOLDER="$2"
 
-cd $QUESTION_FOLDER
+#cd $QUESTION_FOLDER
 
 #echo $QUESTION_FOLDER
 
 clear
 
-files=(*.rkt)
+files=("$QUESTION_FOLDER"/*.rkt)
 
 n=0
 option="x"
@@ -34,9 +34,10 @@ main() {
       filename=${files[$n]}
       filename="${filename%-WithTests.*}"
       imgfilename="$filename-Images.png"
+      nome="$(basename $filename)"
 
       echo ""
-      echo -e "${RED}${files[$n]}${NC}"
+      echo -e "${RED}${nome}${NC}"
       echo ""
       echo -e "${HIGH}********************************************************** CODE ************************************************************************${NC}"
       echo ""
@@ -122,7 +123,7 @@ main() {
       # s não echo
       echo -e "${RED}                                            "$(( n+1 )) of $max" ${NC}"
       echo ""
-      echo -e "${RED}${files[$n]}${NC}"
+      echo -e "${RED}${nome}${NC}"
       echo ""
       echo -e "${RED}                                       <- (z) ---- (x) -> ${NC}"
 
@@ -152,6 +153,7 @@ main() {
       fi
 
       # CHANGE CODE
+
       if [ $option = "c" ]
       then
           echo -e "${RED} Change LIVRE (1) or COR (2) ${NC}"
