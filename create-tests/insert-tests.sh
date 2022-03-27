@@ -22,7 +22,7 @@ else
 	tvar=$2
 fi
 
-config=';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Incluído pelo script insertTests.sh ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+config=';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Incluído pelo script insert-tests.sh ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require racket/base)
 (require racket/struct)
