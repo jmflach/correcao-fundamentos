@@ -53,16 +53,18 @@ first_line=$(head -1 $newfilename)
 case $first_line in
   (*";; The first three lines of this file were inserted by DrRacket. They record metadata"*)
 		#echo "Aquivo RKT"
-		head -3 $newfilename > temp-head
-		#echo "$config" >> temp
+		TMPH="/tmp/temp-head-$(basename $filename)"
+		TMPT="/tmp/temp-tail-$(basename $filename)"
 
-		tail --lines=+4 $newfilename > temp-tail
+		# Separar as 3 primeiras linhas de configuração do código
+		head -3 $newfilename > $TMPH
+		tail --lines=+4 $newfilename > $TMPT
 
-
-		echo "$config" | cat - temp-tail > temp && mv temp $newfilename
+		# Joga a configuração da correção no início do código
+		echo "$config" | cat - $TMPT > temp && mv temp $newfilename && rm $TMPT
 
 		# Deixa a configuração do aluno
-		cat temp-head | cat - $newfilename > temp && mv temp $newfilename
+		cat $TMPH | cat - $newfilename > temp && mv temp $newfilename && rm $TMPH
 
 		# Substitui a configuração do racket do aluno pela padrão (linguagens e pacotes)
 		#echo -e "$rkt_config" | cat - $newfilename > temp && mv temp $newfilename
@@ -72,6 +74,7 @@ case $first_line in
 		echo "$config" | cat - $newfilename > temp && mv temp $newfilename
 		echo -e "$rkt_config" | cat - $newfilename > temp && mv temp $newfilename
 esac
+
 
 python3 "$SCRIPTPATH"/struct-transparent.py $newfilename
 

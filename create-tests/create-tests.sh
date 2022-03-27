@@ -17,7 +17,7 @@ TMP="$original_files/../tmp"
 filename=$( basename $1 )
 folder=`realpath "$SCRIPTPATH"/../../testes/"${filename%.*}"`
 
-echo "$folder"
+#echo "$folder"
 
 rm -rf $folder
 mkdir $folder
@@ -25,8 +25,8 @@ mkdir $folder
 rm -rf $TMP
 cp -r "$original_files" "$TMP"
 
-echo $SCRIPT
-echo $SCRIPTPATH
+#echo $SCRIPT
+#echo $SCRIPTPATH
 
 
 echo "Criando testes para gabarito"

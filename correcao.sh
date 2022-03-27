@@ -86,9 +86,7 @@ if [ "$ORG" = true ]; then
 fi;
 
 if [ "$CREATE" = true ]; then
-  echo "$TEST_FILE"
-  echo "$ORG_FILES"
-  echo "$GAB"
+  echo -e "\nInserindo testes do arquivo $TEST_FILE nos arquivos que estao em $ORG_FILES\n\n"
   "$SCRIPTPATH"/create-tests/create-tests.sh "$TEST_FILE" "$ORG_FILES" "$GAB"
 fi;
 
