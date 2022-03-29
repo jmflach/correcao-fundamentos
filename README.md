@@ -1,5 +1,9 @@
 # correcao-fundamentos
 
+<p align="center">
+  <img src="racket-skull.png" width="200" title="hover text">
+</p>
+
 Esse projeto tem a finalidade de ajudar na correção das listas de exercícios da disciplina de Fundamentos de Algoritmos da UFRGS.
 
 # Pré-requisitos
