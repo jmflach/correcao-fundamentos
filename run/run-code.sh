@@ -252,7 +252,7 @@ function check-contrato
   #espaco="[ :>-]*"
   #fim="${espaco}$"
   espaco="[ ]*"
-  fim=${espaco}
+  fim="${espaco}$"
   arrow="${espaco}[-|=]*>${espaco}"
   dots="${espaco}:${espaco}"
 
