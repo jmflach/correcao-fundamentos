@@ -35,9 +35,9 @@ while (( "$#" )); do
       ;;
     --create-tests)
       if [ -n "$2" ] && [ ${2:0:1} != "-" ] && [ -n "$3" ] && [ ${3:0:1} != "-" ] && [ -n "$4" ] && [ ${4:0:1} != "-" ]; then
-        TEST_FILE=$2
-        ORG_FILES=$3
-        GAB=$4
+        ORG_FILES=$2
+        GAB=$3
+        TEST_FILE=$4
         shift 4
       else
         echo "Erro: Estão faltando os argumentos para $1" >&2

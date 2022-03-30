@@ -71,7 +71,7 @@ Neste momento você pode fazer a correção dos nomes dos arquivos.
 7 - Agora vamos inserir os testes nos arquivos dos alunos. Neste passo, para cada submissão da pasta `envio`, serão adicionados os testes que estarão em outro arquivo separado, que deverá ser obtido com o professor responsável pela lista. Rode o script:
 
 ```
-./correcao-fundamentos/correcao.sh --create-tests <test-file> submissoes/envios <gabarito>
+./correcao-fundamentos/correcao.sh --create-tests submissoes/envios <gabarito> <test-file>
 ```
 
 É necessário passar o arquivo de gabarito também como parâmetro, para que os testes sejam inseridos no gabarito também. Deve-se sempre assertar que todos os testes passam sem erros no gabarito.
