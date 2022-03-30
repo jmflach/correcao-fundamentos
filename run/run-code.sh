@@ -256,6 +256,7 @@ function check-contrato
   arrow="${espaco}[-|=]*>${espaco}"
   dots="${espaco}:${espaco}"
 
+  RIGHT="$FUNC_NAME: $IN -> $OUT"
   STR="${FUNC_NAME}${dots}${IN}${arrow}${OUT}${fim}"
 
   #echo "Checando contrato da função $FUNC_NAME"
@@ -267,6 +268,7 @@ function check-contrato
   if [ -z "$r" ]
   then
       echo -e "${ATT}ERRO: Contrato "$FUNC_NAME"${NC}"
+      echo -e "${ATT}Correto: "$RIGHT"${NC}"
   else
       echo -e "${OK}OK${NC}"
       echo -e "${OK}************************************************************************************************${NC}"
