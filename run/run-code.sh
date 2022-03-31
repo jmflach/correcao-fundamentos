@@ -56,6 +56,7 @@ main() {
       simbolo="(simbolo|símbolo|symbol)"
       bool="(booleano|bool|boolean)"
       imagem="(image|imagem)"
+      string="string"
 
       # CONTRATOS:
 
@@ -85,7 +86,7 @@ main() {
         check-contrato "soma-mesa" "mesa" "${numero}"
 
         # ;; escova?: Carta Mesa -> Booleano
-        check-contrato "escova\?" "carta mesa" "booleano"
+        check-contrato "escova\?" "carta mesa" "${bool}"
 
       fi
 
@@ -95,6 +96,8 @@ main() {
         # ;; jogada-escova: Mão Mesa -> String
 
         check-contrato "jogada-escova" "mão mesa" "${string}"
+
+        check-have "escova\?"
 
       fi
 
@@ -271,6 +274,31 @@ function check-contrato
       echo -e "${ATT}Correto: "$RIGHT"${NC}"
   else
       echo -e "${OK}OK${NC}"
+      echo -e "${OK}************************************************************************************************${NC}"
+      pygmentize -l racket tmp.rkt
+      echo -e "${OK}************************************************************************************************${NC}"
+  fi
+}
+
+function check-have
+{
+  ATT='\e[1;30;45m'
+  OK='\033[1;32m'
+  NC='\033[0m'
+
+  file="$QUESTION_FILE"
+  HAVE="$1"
+
+
+  r=$(grep -i -E "$HAVE" $file)
+
+  echo "$r" > tmp.rkt
+
+  if [ -z "$r" ]
+  then
+      echo -e "${ATT}ERRO: Não tem "$HAVE"${NC}"
+  else
+      echo -e "${OK}TEM${NC}"
       echo -e "${OK}************************************************************************************************${NC}"
       pygmentize -l racket tmp.rkt
       echo -e "${OK}************************************************************************************************${NC}"
