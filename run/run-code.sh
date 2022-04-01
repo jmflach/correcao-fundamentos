@@ -13,7 +13,7 @@ SCRIPTPATH=`dirname "$SCRIPT"`
 QUESTION=$1
 QUESTION_FOLDER="$2"
 
-WIDTH=80
+WIDTH=100
 
 #cd $QUESTION_FOLDER
 
@@ -40,17 +40,19 @@ main() {
 
       echo ""
       echo -e "${RED}${nome}${NC}"
-      echo ""
-      echo -e "${HIGH}********************************************************** CODE ************************************************************************${NC}"
+      echo -e "\n"
+      echo-middle "\\u2550" $WIDTH $RED " CODE "
+      echo -e "\n"
       echo ""
 
       # This script will store the question in a file called racket_question.rkt
       "$SCRIPTPATH"/show-racket-question.sh ${files[$n]} $QUESTION $UP "$QUESTION_FILE"
       pygmentize -f terminal16m -O style=friendly -l racket "$QUESTION_FILE"
 
-      echo ""
-      echo -e "${HIGH}****************************************************************************************************************************************${NC}"
-      echo ""
+      echo -e "\n"
+      #echo -e "${HIGH}****************************************************************************************************************************************${NC}"
+      echo-n "\\u2550" $WIDTH $RED
+      echo -e "\n"
 
       espaco="[ :>-]*"
       fim="${espaco}$"
@@ -126,12 +128,16 @@ main() {
       echo ""
       # n é numero de chars
       # s não echo
+      echo -en "${RED}"
       status_bar $(( n+1 )) $max
+      echo -en "${NC}"
+      echo ""
       echo -e "${RED}                                            "$(( n+1 )) of $max" ${NC}"
       echo ""
-      echo -e "${RED}${nome}${NC}"
+      echo -e "${RED}                                      \\u25c0\\u2500 (z) \u2500\u2500\u2500\u2500 (x) \u2500\\u25b6 ${NC}"
       echo ""
-      echo -e "${RED}                                       <- (z) ---- (x) -> ${NC}"
+      echo -e "${RED}${nome}${NC}"
+
 
 
 
@@ -239,6 +245,39 @@ main() {
       fi
 
       clear
+  done
+}
+
+function echo-middle
+{
+  CHAR=$1
+  N=$2
+  COR=$3
+  STR=$4
+
+  SIZE=`expr length "$STR"`
+
+  HALF=$(( ($N - $SIZE) / 2 ))
+
+  for counter in $( seq 1 $HALF ); do
+    echo -ne "${COR}$CHAR${NC}"
+  done
+
+  echo -ne "${COR}$STR${NC}"
+
+  for counter in $( seq 1 $HALF ); do
+    echo -ne "${COR}$CHAR${NC}"
+  done
+}
+
+function echo-n
+{
+  CHAR=$1
+  N=$2
+  COR=$3
+
+  for counter in $( seq 1 $N ); do
+    echo -ne "${COR}$CHAR${NC}"
   done
 }
 
