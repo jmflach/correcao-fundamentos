@@ -13,6 +13,8 @@ SCRIPTPATH=`dirname "$SCRIPT"`
 QUESTION=$1
 QUESTION_FOLDER="$2"
 
+WIDTH=80
+
 #cd $QUESTION_FOLDER
 
 #echo $QUESTION_FOLDER
@@ -124,11 +126,14 @@ main() {
       echo ""
       # n é numero de chars
       # s não echo
+      status_bar $(( n+1 )) $max
       echo -e "${RED}                                            "$(( n+1 )) of $max" ${NC}"
       echo ""
       echo -e "${RED}${nome}${NC}"
       echo ""
       echo -e "${RED}                                       <- (z) ---- (x) -> ${NC}"
+
+
 
       echo -e "${RED} Rodar? (r) ${NC}"
       echo ""
@@ -303,6 +308,27 @@ function check-have
       pygmentize -l racket tmp.rkt
       echo -e "${OK}************************************************************************************************${NC}"
   fi
+}
+
+function status_bar
+{
+  #statements
+  CURRENT=$1
+  TOTAL=$2
+  FB=2588
+
+  echo ""
+  echo -n "                               "
+
+  for counter in $( seq 1 $CURRENT ); do
+    echo -ne \\u$FB
+  done
+
+  for counter in $( seq $CURRENT $(( TOTAL - 1 )) ); do
+    echo -ne \\u2591
+  done
+
+  echo ""
 }
 
 main "$@"; exit
