@@ -42,19 +42,19 @@ r=$(grep -i -A 1000 -B $UP "QUEST.O $ATUAL" $file | grep -i -m 1 -A 1 -B 1000 "Q
 
 ### WHEN THE ATUAL IS THE LAST ###
 
-: '
-if [ -z "$r" ]
-then
-    r=$(grep -i -A 1000 "QUEST.O $ATUAL" $file | grep -i -m 1 -B 1000 "QUEST.O EXTRA")
-fi
-'
+
+
+
 
 if [ -z "$r" ]
 then
-    r=$(grep -i -A 1000 "QUEST.O $ATUAL" $file | grep -i -m 1 -B 1000 "TESTES TESTES TESTES")
+    r=$(grep -i -A 1000 "QUEST.O $ATUAL" $file | grep -i -m 1 -A 1 -B 1000 ";; DEFINIÇÃO DE FUNÇÕES PARA DESENHAR UMA CARTA")
 fi
 
-
+if [ -z "$r" ]
+then
+    r=$(grep -i -A 1000 "QUEST.O $ATUAL" $file | grep -i -m 1 -A 1 -B 1000 "QUEST.O EXTRA")
+fi
 #if [ -z "$r" ]
 #then
 #    r=$(grep -i -A 1000 "EXERC.CIO $ATUAL" $file | grep -i -m 1  -B 1000 "TESTES TESTES TESTES")
