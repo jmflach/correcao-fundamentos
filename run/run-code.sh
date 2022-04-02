@@ -7,6 +7,8 @@ RED='\033[1;34m'
 ATT='\033[1;31m'
 NC='\033[0m' # No Color
 
+TEXT_EDITOR=xed
+
 SCRIPT=`realpath $0`
 SCRIPTPATH=`dirname "$SCRIPT"`
 
@@ -203,6 +205,18 @@ main() {
       if [ $option = "o" ]
       then
           drracket ${files[$n]}
+          read -n 1 -s -r -p "" option
+      fi
+
+      # OPEN THE PRIME (ORIGINAL) FILE
+      if [ $option = "p" ]
+      then
+          ORIGINAL_PATH=`realpath "$SCRIPTPATH/../../submissoes/envios"`
+          ORIGINAL_FILE=$( echo ${nome} | sed 's/-WithTests.rkt//g' )
+          #echo $ORIGINAL_PATH/$ORIGINAL_FILE
+          AUX=$( find $ORIGINAL_PATH -name "${ORIGINAL_FILE}*" )
+          #echo $AUX
+          xed $AUX
           read -n 1 -s -r -p "" option
       fi
 
