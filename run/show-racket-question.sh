@@ -51,9 +51,14 @@ then
     r=$(grep -i -A 1000 "QUEST.O $ATUAL" $file | grep -i -m 1 -A 1 -B 1000 ";; DEFINIÇÃO DE FUNÇÕES PARA DESENHAR UMA CARTA")
 fi
 
+#if [ -z "$r" ]
+#then
+#    r=$(grep -i -A 1000 "QUEST.O $ATUAL" $file | grep -i -m 1 -A 1 -B 1000 "QUEST.O EXTRA")
+#fi
+
 if [ -z "$r" ]
 then
-    r=$(grep -i -A 1000 "QUEST.O $ATUAL" $file | grep -i -m 1 -A 1 -B 1000 "QUEST.O EXTRA")
+    r=$(grep -i -A 1000 "QUEST.O $ATUAL" $file | grep -i -m 1 -A 1 -B 1000 "XXX TESTES INSERIDOS XXX")
 fi
 #if [ -z "$r" ]
 #then

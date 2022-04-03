@@ -124,6 +124,7 @@ main() {
         # ;; mostra-jogada: Mão Mesa -> Imagem
 
         check-contrato "mostra-jogada" "mão mesa" "${imagem}"
+        check-have "mostra-jogada"
       fi
 
 
@@ -211,11 +212,14 @@ main() {
       # OPEN THE PRIME (ORIGINAL) FILE
       if [ $option = "p" ]
       then
-          ORIGINAL_PATH=`realpath "$SCRIPTPATH/../../submissoes/envios"`
-          ORIGINAL_FILE=$( echo ${nome} | sed 's/-WithTests.rkt//g' )
-          #echo $ORIGINAL_PATH/$ORIGINAL_FILE
-          AUX=$( find $ORIGINAL_PATH -name "${ORIGINAL_FILE}*" )
-          #echo $AUX
+          #ORIGINAL_PATH=`realpath "$SCRIPTPATH/../../submissoes/envios"`
+          #ORIGINAL_FILE=$( echo ${nome} | sed 's/-WithTests.rkt//g' )
+
+          #AUX=$( find $ORIGINAL_PATH -name "${ORIGINAL_FILE}*" )
+
+          AUX=$( original-file $nome )
+          echo $AUX
+
           xed $AUX
           read -n 1 -s -r -p "" option
       fi
@@ -260,6 +264,18 @@ main() {
 
       clear
   done
+}
+
+function original-file
+{
+  nome=$1
+
+  ORIGINAL_PATH=`realpath "$SCRIPTPATH/../../submissoes/envios"`
+  ORIGINAL_FILE=$( echo ${nome} | sed 's/-WithTests.rkt//g' )
+  #echo $ORIGINAL_PATH/$ORIGINAL_FILE
+  AUX=$( find $ORIGINAL_PATH -name "${ORIGINAL_FILE}*" )
+
+  echo "$AUX"
 }
 
 function echo-middle
