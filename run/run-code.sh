@@ -36,9 +36,11 @@ main() {
   do
       #echo ${files[$n]}
       filename=${files[$n]}
-      filename="${filename%-WithTests.*}"
-      imgfilename="$filename-Images.png"
+      filename="${filename%.*}"
+      filename="${filename%-WithTests*}"
+
       nome="$(basename $filename)"
+      imgfilename="$nome-Images.png"
 
       echo ""
       echo -e "${RED}${nome}${NC}"
@@ -160,7 +162,8 @@ main() {
           echo ${files[$n]}
           racket ${files[$n]}
           echo -e "${RED} Código Rodado ${NC}"
-          #xdg-open "$imgfilename"
+          echo $imgfilename
+          xdg-open "$imgfilename"
           read -n 1 -s -r -p "" option
       fi
 
