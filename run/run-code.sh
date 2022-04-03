@@ -114,6 +114,7 @@ main() {
         # ;; seleciona-carta: Mão Mesa -> Jogada
 
         check-contrato "seleciona-carta" "mão mesa" "jogada"
+        check-have-all-file ${files[$n]} "seleciona-carta"
       fi
 
 
@@ -124,7 +125,7 @@ main() {
         # ;; mostra-jogada: Mão Mesa -> Imagem
 
         check-contrato "mostra-jogada" "mão mesa" "${imagem}"
-        check-have "mostra-jogada"
+        #check-have-all-file ${files[$n]} "mostra-jogada"
       fi
 
 
@@ -212,11 +213,6 @@ main() {
       # OPEN THE PRIME (ORIGINAL) FILE
       if [ $option = "p" ]
       then
-          #ORIGINAL_PATH=`realpath "$SCRIPTPATH/../../submissoes/envios"`
-          #ORIGINAL_FILE=$( echo ${nome} | sed 's/-WithTests.rkt//g' )
-
-          #AUX=$( find $ORIGINAL_PATH -name "${ORIGINAL_FILE}*" )
-
           AUX=$( original-file $nome )
           echo $AUX
 
@@ -266,17 +262,7 @@ main() {
   done
 }
 
-function original-file
-{
-  nome=$1
 
-  ORIGINAL_PATH=`realpath "$SCRIPTPATH/../../submissoes/envios"`
-  ORIGINAL_FILE=$( echo ${nome} | sed 's/-WithTests.rkt//g' )
-  #echo $ORIGINAL_PATH/$ORIGINAL_FILE
-  AUX=$( find $ORIGINAL_PATH -name "${ORIGINAL_FILE}*" )
-
-  echo "$AUX"
-}
 
 function echo-middle
 {
@@ -377,6 +363,49 @@ function check-have
       pygmentize -l racket tmp.rkt
       echo -e "${OK}************************************************************************************************${NC}"
   fi
+}
+
+function check-have-all-file
+{
+  ATT='\e[1;30;45m'
+  OK='\033[1;32m'
+  NC='\033[0m'
+
+  file=$1
+  HAVE="$2"
+
+  echo "olhando em " $file
+  echo "have " $HAVE
+
+  r=$(grep -i -E -B 1000 "XXX TESTES INSERIDOS XXX" $file)
+
+  echo "$r" > tmp.rkt
+
+  r=$(grep -i -E "$HAVE" tmp.rkt)
+
+  echo "$r" > tmp.rkt
+
+  if [ -z "$r" ]
+  then
+      echo -e "${ATT}ERRO: Não tem "$HAVE"${NC}"
+  else
+      echo -e "${OK}TEM${NC}"
+      echo -e "${OK}************************************************************************************************${NC}"
+      pygmentize -l racket tmp.rkt
+      echo -e "${OK}************************************************************************************************${NC}"
+  fi
+}
+
+function original-file
+{
+  nome=$1
+
+  ORIGINAL_PATH=`realpath "$SCRIPTPATH/../../submissoes/envios"`
+  ORIGINAL_FILE=$( echo ${nome} | sed 's/-WithTests.rkt//g' )
+  #echo $ORIGINAL_PATH/$ORIGINAL_FILE
+  AUX=$( find $ORIGINAL_PATH -name "${ORIGINAL_FILE}*" )
+
+  echo "$AUX"
 }
 
 function status_bar
