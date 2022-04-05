@@ -238,6 +238,15 @@ main() {
           read -n 1 -s -r -p "" option
       fi
 
+      if [ $option = "t" ]
+      then
+          AUX=$( original-file $nome )
+          echo $AUX
+
+          tail -n30 $AUX
+          read -n 1 -s -r -p "" option
+      fi
+
       # SHOW CODE UP
       if [ $option = "u" ]
       then
