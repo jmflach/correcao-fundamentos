@@ -71,15 +71,30 @@ main() {
       carta="carta${espaco}"
       mesa="mesa${espaco}"
 
+      if [ $QUESTION = 1 ]
+      then
+        # ;; soma15: Carta Mesa -> Carta
+        check-have-n "define.*make-carta" 4 "carta"
+        check-have-n "define.*make-mão" 4 "mão"
+        check-have-n "define.*make-mesa" 4 "mesa"
 
+        check-have-n ";;.*:${espaco}${string}" 1 "def string"
+        check-have-n ";;.*:${espaco}${numero}" 1 "def numero"
+        check-have-n ";;.*:${espaco}carta" 1 "def carta"
+      fi
 
 
       #2:
-
+      # contrato q2
+      if [ $QUESTION = 2 ]
+      then
+        # ;; soma15: Carta Mesa -> Carta
+        check-contrato "soma15\?" "carta carta" "${bool}"
+      fi
 
 
       # contrato q2
-      if [ $QUESTION = 2 ]
+      if [ $QUESTION = 3 ]
       then
         # ;; soma15: Carta Mesa -> Carta
         check-contrato "soma15" "carta mesa" "carta"
@@ -162,8 +177,8 @@ main() {
           echo ${files[$n]}
           racket ${files[$n]}
           echo -e "${RED} Código Rodado ${NC}"
-          echo $imgfilename
-          xdg-open "$imgfilename"
+          #echo $imgfilename
+          #xdg-open "$imgfilename"
           read -n 1 -s -r -p "" option
       fi
 
@@ -340,6 +355,29 @@ function check-contrato
       echo -e "${OK}************************************************************************************************${NC}"
       pygmentize -l racket tmp.rkt
       echo -e "${OK}************************************************************************************************${NC}"
+  fi
+}
+
+function check-have-n
+{
+  ATT='\e[1;30;45m'
+  OK='\033[1;32m'
+  NC='\033[0m'
+
+  file="$QUESTION_FILE"
+  HAVE="$1"
+  QTDE=$2
+  MSG=$3
+
+  r=$(grep -i -E "$HAVE" $file | wc -l)
+
+  #echo "TEM $r de $HAVE"
+
+  if [ $r -ge $QTDE ]
+  then
+      echo -e "${OK}TEM $r ${MSG} ${NC}"
+  else
+      echo -e "${ATT}NÃO TEM $QTDE ${MSG} TEM APENAS $r ${NC}"
   fi
 }
 
