@@ -74,13 +74,18 @@ main() {
       if [ $QUESTION = 1 ]
       then
         # ;; soma15: Carta Mesa -> Carta
+        echo -e "\nCONSTANTES:\n"
         check-have-n "define.*make-carta" 4 "carta"
         check-have-n "define.*make-mão" 4 "mão"
         check-have-n "define.*make-mesa" 4 "mesa"
+        check-have-n ".*define.*CARTA-NULA.*make-carta" 1 "CARTA-NULA"
 
+        echo -e "\nDEF DADOS:\n"
         check-have-n ";;.*:${espaco}${string}" 1 "def string"
         check-have-n ";;.*:${espaco}${numero}" 1 "def numero"
-        check-have-n ";;.*:${espaco}carta" 1 "def carta"
+        check-have-n ";;.*:${espaco}carta" 7 "def carta"
+
+
       fi
 
 
@@ -90,6 +95,8 @@ main() {
       then
         # ;; soma15: Carta Mesa -> Carta
         check-contrato "soma15\?" "carta carta" "${bool}"
+        check-have-n ";;.*\(soma15\?.*\).*" 2 "EXEMPLOS"
+        check-have-n ".*check-expect.*\(soma15\?.*\).*" 2 "TESTES"
       fi
 
 
@@ -196,9 +203,9 @@ main() {
           read -n 1 -s -r -p "" changes
           if [ $changes = "1" ]
           then
-              echo -e "${RED} Alterando o código LIVRE... ${NC}"
+              echo -e "${RED} Inserindo CARTA-NULA... ${NC}"
               echo ""
-              sed -i 's/(define REAL_LIVRE LIVRE)/(define REAL_LIVRE LIVRE_AUX)/g' ${files[$n]}
+              sed -i 's/;; \(define CARTA-NULA/\(define CARTA-NULA/g' ${files[$n]}
           fi
           if [ $changes = "2" ]
           then

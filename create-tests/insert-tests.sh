@@ -86,14 +86,7 @@ tests_str=';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 echo "$tests_str" >> $newfilename
 
-last_line=$(grep . $tvar | tail -1)
-case $last_line in
-  (*"(test)"*)
-     echo "" >> $newfilename
-     ;;
-  (*)
-     echo "(test)" >> $newfilename
-esac
+
 
 
 
@@ -107,5 +100,12 @@ case $first_line in
      cat $tvar >> $newfilename
 esac
 
-
+last_line=$(grep . $tvar | tail -1)
+case $last_line in
+  (*"(test)"*)
+     echo "" >> $newfilename
+     ;;
+  (*)
+     echo "(test)" >> $newfilename
+esac
 #echo "Testes inseridos $filename"
