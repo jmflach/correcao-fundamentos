@@ -78,7 +78,8 @@ esac
 
 python3 "$SCRIPTPATH"/struct-transparent.py $newfilename
 
-#python3 remove-img-tests.py $newfilename
+#python3 "$SCRIPTPATH"/remove-img-tests.py $newfilename
+
 
 tests_str=';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;                                     XXX TESTES INSERIDOS XXX                                     ;;;;;;;;;;

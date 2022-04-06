@@ -105,12 +105,15 @@ main() {
       then
         # ;; soma15: Carta Mesa -> Carta
         check-contrato "soma15" "carta mesa" "carta"
+        check-have-n "soma15\?" 4 "USOU A FUNÇÃO ANTERIOR"
+        check-have-n ";;.*\(soma15.*\).*" 2 "EXEMPLOS"
+        check-have-n ".*check-expect.*\(soma15.*\).*" 2 "TESTES"
       fi
 
       #3:
 
 
-      if [ $QUESTION = 3 ]
+      if [ $QUESTION = 4 ]
       then
         # ;; soma-mesa: Mesa -> Número
         check-contrato "soma-mesa" "mesa" "${numero}"
@@ -199,13 +202,13 @@ main() {
 
       if [ $option = "c" ]
       then
-          echo -e "${RED} Change LIVRE (1) or COR (2) ${NC}"
+          echo -e "${RED} ADD NULA (1) or COR (2) ${NC}"
           read -n 1 -s -r -p "" changes
           if [ $changes = "1" ]
           then
               echo -e "${RED} Inserindo CARTA-NULA... ${NC}"
               echo ""
-              sed -i 's/;; \(define CARTA-NULA/\(define CARTA-NULA/g' ${files[$n]}
+              sed -i 's/;; (define CARTA-NULA/(define CARTA-NULA/g' ${files[$n]}
           fi
           if [ $changes = "2" ]
           then
@@ -242,6 +245,16 @@ main() {
           echo $AUX
 
           xed $AUX
+          read -n 1 -s -r -p "" option
+      fi
+
+      # OPEN THE PRIME (ORIGINAL) FILE IN RACKET
+      if [ $option = "i" ]
+      then
+          AUX=$( original-file $nome )
+          echo $AUX
+
+          drracket $AUX
           read -n 1 -s -r -p "" option
       fi
 
