@@ -21,6 +21,22 @@ FILE2SAVE=$4
 #echo -e "${BLUE}$file${NC}"
 #echo ""
 
+
+INICIO=("QUEST.O $ATUAL" "${ATUAL}${ATUAL}${ATUAL}${ATUAL}${ATUAL}")
+FIM=("QUEST.O $PROX" "${PROX}${PROX}${PROX}${PROX}${PROX}" ";; DEFINIÇÃO DE FUNÇÕES PARA DESENHAR UMA CARTA" "XXX TESTES INSERIDOS XXX")
+
+s=""
+
+for inicio in "${INICIO[@]}"; do   # The quotes are necessary here
+      for fim in "${FIM[@]}"; do   # The quotes are necessary here
+        if [ -z "$s" ]
+        then
+          #echo "$inicio $fim"
+          s=$(grep -i -A 1000 -B $UP "$inicio" $file | grep -i -m 1 -A 1 -B 1000 "$fim")
+        fi
+      done
+done
+
 r=$(grep -i -A 1000 -B $UP "QUEST.O $ATUAL" $file | grep -i -m 1 -A 1 -B 1000 "QUEST.O $PROX")
 
 
@@ -88,8 +104,8 @@ fi
 #fi
 
 #r=$(echo "$r" | grep -i -m 1  -A 40 ";;")
-
-echo "$r" > "$FILE2SAVE"
+#echo "$s"
+echo "$s" > "$FILE2SAVE"
 
 #pygmentize -l racket  tmp.rkt
 

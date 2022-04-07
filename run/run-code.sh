@@ -62,7 +62,7 @@ main() {
       fim="${espaco}$"
       numero="(numero|número|number)"
       simbolo="(simbolo|símbolo|symbol)"
-      bool="(booleano|bool|boolean)"
+      bool="(booleano|bool|boolean|booleana)"
       imagem="(image|imagem)"
       string="string"
 
@@ -115,16 +115,14 @@ main() {
 
       if [ $QUESTION = 4 ]
       then
-        # ;; soma-mesa: Mesa -> Número
-        check-contrato "soma-mesa" "mesa" "${numero}"
-
         # ;; escova?: Carta Mesa -> Booleano
         check-contrato "escova\?" "carta mesa" "${bool}"
 
+        check-ex-testes "escova\?"
       fi
 
       #4:
-      if [ $QUESTION = 4 ]
+      if [ $QUESTION = 5 ]
       then
         # ;; jogada-escova: Mão Mesa -> String
 
@@ -309,7 +307,12 @@ main() {
   done
 }
 
-
+function check-ex-testes
+{
+  FNAME=$1
+  check-have-n ";;.*\(${FNAME}.*\).*" 2 "EXEMPLOS"
+  check-have-n ".*check-expect.*\(${FNAME}.*\).*" 2 "TESTES"
+}
 
 function echo-middle
 {
