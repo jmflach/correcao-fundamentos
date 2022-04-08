@@ -3,10 +3,10 @@
 ATUAL=$2
 PROX=$(($ATUAL + 1))
 
-if [ $ATUAL -eq 6 ]
-then
-  ATUAL="EXTRA"
-fi
+#if [ $ATUAL -eq 6 ]
+#then
+#  ATUAL="EXTRA"
+#fi
 
 file=$1
 

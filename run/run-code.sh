@@ -31,7 +31,158 @@ max="${#files[@]}"
 UP=0
 QUESTION_FILE="racket_question.rkt"
 
+function show_question
+{
+  FILE=$1
+  nome=$2
+  n=$3
+
+  echo ""
+  echo -e "${RED}${nome}${NC}"
+  echo -e "\n"
+  echo-middle "\\u2550" $WIDTH $RED " CODE "
+  echo -e "\n"
+  echo ""
+
+  # This script will store the question in a file called racket_question.rkt
+  "$SCRIPTPATH"/show-racket-question.sh "$FILE" $QUESTION $UP "$QUESTION_FILE"
+  clear
+  pygmentize -f terminal16m -O style=friendly -l racket "$QUESTION_FILE"
+
+  echo -e "\n"
+  #echo -e "${HIGH}****************************************************************************************************************************************${NC}"
+  echo-n "\\u2550" $WIDTH $RED
+  echo -e "\n"
+  echo ""
+  # n é numero de chars
+  # s não echo
+  echo -en "${RED}"
+  status_bar $(( n+1 )) $max
+  echo -en "${NC}"
+  echo ""
+  echo -e "${RED}                                            "$(( n+1 )) of $max" ${NC}"
+  echo ""
+  echo -e "${RED}                                      \\u25c0\\u2500 (z) \u2500\u2500\u2500\u2500 (x) \u2500\\u25b6 ${NC}"
+  echo ""
+  echo -e "${RED}${nome}${NC}"
+}
+
+function check-question
+{
+
+  espaco="[ :>-]*"
+  fim="${espaco}$"
+  numero="(numero|número|number)"
+  simbolo="(simbolo|símbolo|symbol)"
+  bool="(booleano|bool|boolean|booleana)"
+  imagem="(image|imagem)"
+  string="string"
+
+  # CONTRATOS:
+
+  carta="carta${espaco}"
+  mesa="mesa${espaco}"
+
+  if [ $QUESTION = 1 ]
+  then
+    # ;; soma15: Carta Mesa -> Carta
+    echo -e "\nCONSTANTES:\n"
+    check-have-n "define.*make-carta" 4 "carta"
+    check-have-n "define.*make-mão" 4 "mão"
+    check-have-n "define.*make-mesa" 4 "mesa"
+    check-have-n ".*define.*CARTA-NULA.*make-carta" 1 "CARTA-NULA"
+
+    echo -e "\nDEF DADOS:\n"
+    check-have-n ";;.*:${espaco}${string}" 1 "def string"
+    check-have-n ";;.*:${espaco}${numero}" 1 "def numero"
+    check-have-n ";;.*:${espaco}carta" 7 "def carta"
+  fi
+
+  #2:
+  # contrato q2
+  if [ $QUESTION = 2 ]
+  then
+    # ;; soma15: Carta Mesa -> Carta
+    check-contrato "soma15\?" "carta carta" "${bool}"
+    check-have-n ";;.*\(soma15\?.*\).*" 2 "EXEMPLOS"
+    check-have-n ".*check-expect.*\(soma15\?.*\).*" 2 "TESTES"
+  fi
+
+
+  # contrato q2
+  if [ $QUESTION = 3 ]
+  then
+    # ;; soma15: Carta Mesa -> Carta
+    check-contrato "soma15" "carta mesa" "carta"
+    check-have-n "soma15\?" 4 "USOU A FUNÇÃO ANTERIOR"
+    check-have-n ";;.*\(soma15.*\).*" 2 "EXEMPLOS"
+    check-have-n ".*check-expect.*\(soma15.*\).*" 2 "TESTES"
+  fi
+
+  #3:
+
+
+  if [ $QUESTION = 4 ]
+  then
+    # ;; escova?: Carta Mesa -> Booleano
+    check-contrato "escova\?" "carta mesa" "${bool}"
+
+    check-ex-testes "escova\?"
+  fi
+
+  #4:
+  if [ $QUESTION = 5 ]
+  then
+    # ;; jogada-escova: Mão Mesa -> String
+
+    check-contrato "jogada-escova" "mão mesa" "${string}"
+    check-ex-testes "jogada-escova"
+    check-have "escova\?"
+
+  fi
+
+  #5:
+
+  if [ $QUESTION = 6 ]
+  then
+    # ;; seleciona-carta: Mão Mesa -> Jogada
+
+    check-contrato "seleciona-carta" "mão mesa" "jogada"
+    check-ex-testes "seleciona-carta"
+  fi
+
+
+  #6:
+
+  if [ $QUESTION = 7 ]
+  then
+    # ;; mostra-jogada: Mão Mesa -> Imagem
+
+    check-contrato "desenha-carta" "carta" "${imagem}"
+    check-have-n ";;.*\(desenha-carta.*\).*" 1 "EXEMPLOS"
+    #check-have-all-file ${files[$n]} "mostra-jogada"
+  fi
+
+  if [ $QUESTION = 8 ]
+  then
+    # ;; mostra-jogada: Mão Mesa -> Imagem
+
+    check-contrato "desenha-carta" "carta" "${imagem}"
+    check-have-n ";;.*\(desenha-carta.*\).*" 1 "EXEMPLOS"
+    #check-have-all-file ${files[$n]} "mostra-jogada"
+  fi
+}
+
+function list-options
+{
+  echo -e "${RED} (r) Run${NC}"
+  echo -e "${RED} (o) Open${NC}"
+  echo -e "${RED} (p) Open original${NC}"
+  echo -e "${RED} (t) Show tail original${NC}"
+}
+
 main() {
+  CHANGED=1
   while [ $option != "q" ]
   do
       #echo ${files[$n]}
@@ -42,142 +193,93 @@ main() {
       nome="$(basename $filename)"
       imgfilename="$nome-Images.png"
 
-      echo ""
-      echo -e "${RED}${nome}${NC}"
-      echo -e "\n"
-      echo-middle "\\u2550" $WIDTH $RED " CODE "
-      echo -e "\n"
-      echo ""
+      if [ $CHANGED -eq 1 ]; then
+        show_question ${files[$n]} $nome $n
+        CHANGED=0
+        echo ""
 
-      # This script will store the question in a file called racket_question.rkt
-      "$SCRIPTPATH"/show-racket-question.sh ${files[$n]} $QUESTION $UP "$QUESTION_FILE"
-      pygmentize -f terminal16m -O style=friendly -l racket "$QUESTION_FILE"
+        check-question
 
-      echo -e "\n"
-      #echo -e "${HIGH}****************************************************************************************************************************************${NC}"
-      echo-n "\\u2550" $WIDTH $RED
-      echo -e "\n"
+        echo ""
 
-      espaco="[ :>-]*"
-      fim="${espaco}$"
-      numero="(numero|número|number)"
-      simbolo="(simbolo|símbolo|symbol)"
-      bool="(booleano|bool|boolean|booleana)"
-      imagem="(image|imagem)"
-      string="string"
+        list-options
 
-      # CONTRATOS:
-
-      carta="carta${espaco}"
-      mesa="mesa${espaco}"
-
-      if [ $QUESTION = 1 ]
-      then
-        # ;; soma15: Carta Mesa -> Carta
-        echo -e "\nCONSTANTES:\n"
-        check-have-n "define.*make-carta" 4 "carta"
-        check-have-n "define.*make-mão" 4 "mão"
-        check-have-n "define.*make-mesa" 4 "mesa"
-        check-have-n ".*define.*CARTA-NULA.*make-carta" 1 "CARTA-NULA"
-
-        echo -e "\nDEF DADOS:\n"
-        check-have-n ";;.*:${espaco}${string}" 1 "def string"
-        check-have-n ";;.*:${espaco}${numero}" 1 "def numero"
-        check-have-n ";;.*:${espaco}carta" 7 "def carta"
-
+        echo ""
 
       fi
 
 
-      #2:
-      # contrato q2
-      if [ $QUESTION = 2 ]
-      then
-        # ;; soma15: Carta Mesa -> Carta
-        check-contrato "soma15\?" "carta carta" "${bool}"
-        check-have-n ";;.*\(soma15\?.*\).*" 2 "EXEMPLOS"
-        check-have-n ".*check-expect.*\(soma15\?.*\).*" 2 "TESTES"
-      fi
 
-
-      # contrato q2
-      if [ $QUESTION = 3 ]
-      then
-        # ;; soma15: Carta Mesa -> Carta
-        check-contrato "soma15" "carta mesa" "carta"
-        check-have-n "soma15\?" 4 "USOU A FUNÇÃO ANTERIOR"
-        check-have-n ";;.*\(soma15.*\).*" 2 "EXEMPLOS"
-        check-have-n ".*check-expect.*\(soma15.*\).*" 2 "TESTES"
-      fi
-
-      #3:
-
-
-      if [ $QUESTION = 4 ]
-      then
-        # ;; escova?: Carta Mesa -> Booleano
-        check-contrato "escova\?" "carta mesa" "${bool}"
-
-        check-ex-testes "escova\?"
-      fi
-
-      #4:
-      if [ $QUESTION = 5 ]
-      then
-        # ;; jogada-escova: Mão Mesa -> String
-
-        check-contrato "jogada-escova" "mão mesa" "${string}"
-
-        check-have "escova\?"
-
-      fi
-
-      #5:
-
-      if [ $QUESTION = 5 ]
-      then
-        # ;; seleciona-carta: Mão Mesa -> Jogada
-
-        check-contrato "seleciona-carta" "mão mesa" "jogada"
-        check-have-all-file ${files[$n]} "seleciona-carta"
-      fi
-
-
-      #6:
-
-      if [ $QUESTION = 6 ]
-      then
-        # ;; mostra-jogada: Mão Mesa -> Imagem
-
-        check-contrato "mostra-jogada" "mão mesa" "${imagem}"
-        #check-have-all-file ${files[$n]} "mostra-jogada"
-      fi
-
-
-      echo ""
-      # n é numero de chars
-      # s não echo
-      echo -en "${RED}"
-      status_bar $(( n+1 )) $max
-      echo -en "${NC}"
-      echo ""
-      echo -e "${RED}                                            "$(( n+1 )) of $max" ${NC}"
-      echo ""
-      echo -e "${RED}                                      \\u25c0\\u2500 (z) \u2500\u2500\u2500\u2500 (x) \u2500\\u25b6 ${NC}"
-      echo ""
-      echo -e "${RED}${nome}${NC}"
-
-
-
-
-      echo -e "${RED} Rodar? (r) ${NC}"
-      echo ""
-      #echo "$filename"
-      #echo "$imgfilename"
 
       read -n 1 -s -r -p "" option
 
       # RUN CODE
+      case $option in
+
+      r)
+        echo -e "${RED} Rodando o código... ${NC}"
+        echo ""
+        echo ${files[$n]}
+        racket ${files[$n]}
+        echo -e "${RED} Código Rodado ${NC}"
+        #echo $imgfilename
+        #xdg-open "$imgfilename"
+        ;;
+
+      o)
+        drracket ${files[$n]} &
+        ;;
+
+      s)
+        xdg-open "$imgfilename"
+        ;;
+
+      p)
+        AUX=$( original-file $nome )
+        echo $AUX
+        xed $AUX
+        ;;
+
+      i)
+        AUX=$( original-file $nome )
+        echo $AUX
+
+        drracket $AUX
+        ;;
+
+      t)
+        AUX=$( original-file $nome )
+        echo $AUX
+
+        tail -n30 $AUX
+        ;;
+
+
+      x)
+        n=$(( n+1 ))
+        CHANGED=1
+      ;;
+      z)
+        n=$(( n-1 ))
+        CHANGED=1
+      ;;
+      g)
+        echo -e "${RED} Ir para: ${NC}"
+        read -r -p "" go
+        n=$(( go-1 ))
+        CHANGED=1
+        ;;
+
+      q)
+        echo -e "\n\nBYE\n\n"
+        ;;
+
+      *)
+        #echo -n "Comando desconhecido"
+        ;;
+    esac
+
+    if [ 1 -eq 0 ]; then
       if [ $option = "r" ]
       then
           echo -e "${RED} Rodando o código... ${NC}"
@@ -186,7 +288,7 @@ main() {
           racket ${files[$n]}
           echo -e "${RED} Código Rodado ${NC}"
           #echo $imgfilename
-          #xdg-open "$imgfilename"
+          xdg-open "$imgfilename"
           read -n 1 -s -r -p "" option
       fi
 
@@ -232,7 +334,7 @@ main() {
       # OPEN FILE
       if [ $option = "o" ]
       then
-          drracket ${files[$n]}
+          drracket ${files[$n]} &
           read -n 1 -s -r -p "" option
       fi
 
@@ -293,19 +395,22 @@ main() {
           UP=0
       fi
 
-
+    fi
+    #read -n 1 -s -r -p "" option
       if [ $n = $max ]
       then
-  	  break       	  #Abandon the while loop.
+  	     break       	  #Abandon the while loop.
       fi
       if [ $n = -1 ]
       then
-  	  break       	  #Abandon the while loop.
+  	     break       	  #Abandon the while loop.
       fi
 
-      clear
+
   done
 }
+
+
 
 function check-ex-testes
 {
