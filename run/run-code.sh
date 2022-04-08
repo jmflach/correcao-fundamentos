@@ -37,6 +37,8 @@ function show_question
   nome=$2
   n=$3
 
+  clear
+
   echo ""
   echo -e "${RED}${nome}${NC}"
   echo -e "\n"
@@ -46,7 +48,6 @@ function show_question
 
   # This script will store the question in a file called racket_question.rkt
   "$SCRIPTPATH"/show-racket-question.sh "$FILE" $QUESTION $UP "$QUESTION_FILE"
-  clear
   pygmentize -f terminal16m -O style=friendly -l racket "$QUESTION_FILE"
 
   echo -e "\n"
@@ -82,6 +83,7 @@ function check-question
 
   carta="carta${espaco}"
   mesa="mesa${espaco}"
+  mao="(mão|mao)"
 
   if [ $QUESTION = 1 ]
   then
@@ -167,8 +169,8 @@ function check-question
   then
     # ;; mostra-jogada: Mão Mesa -> Imagem
 
-    check-contrato "desenha-carta" "carta" "${imagem}"
-    check-have-n ";;.*\(desenha-carta.*\).*" 1 "EXEMPLOS"
+    check-contrato "mostra-jogada" "${mao} mesa" "${imagem}"
+    check-have-n ";;.*\(mostra-jogada.*\).*" 1 "EXEMPLOS"
     #check-have-all-file ${files[$n]} "mostra-jogada"
   fi
 }
@@ -194,8 +196,11 @@ main() {
       imgfilename="$nome-Images.png"
 
       if [ $CHANGED -eq 1 ]; then
+
         show_question ${files[$n]} $nome $n
+
         CHANGED=0
+
         echo ""
 
         check-question
