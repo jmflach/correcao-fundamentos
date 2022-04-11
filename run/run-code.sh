@@ -39,33 +39,32 @@ function show_question
 
   clear
 
-  echo ""
-  echo -e "${RED}${nome}${NC}"
-  echo -e "\n"
-  echo-middle "\\u2550" $WIDTH $RED " CODE "
-  echo -e "\n"
+  #echo ""
+  #echo -e "${RED}${nome}${NC}"
+  #echo -e "\n"
+  echo-middle "\\u2550" $WIDTH $RED " ${nome} "
+  #echo -e "\n"
   echo ""
 
   # This script will store the question in a file called racket_question.rkt
   "$SCRIPTPATH"/show-racket-question.sh "$FILE" $QUESTION $UP "$QUESTION_FILE"
   pygmentize -f terminal16m -O style=friendly -l racket "$QUESTION_FILE"
 
-  echo -e "\n"
   #echo -e "${HIGH}****************************************************************************************************************************************${NC}"
-  echo-n "\\u2550" $WIDTH $RED
-  echo -e "\n"
-  echo ""
+  echo-middle "\\u2550" $WIDTH $RED " ${nome} "
+
   # n é numero de chars
   # s não echo
   echo -en "${RED}"
+  echo""
   status_bar $(( n+1 )) $max
   echo -en "${NC}"
   echo ""
   echo -e "${RED}                                            "$(( n+1 )) of $max" ${NC}"
   echo ""
   echo -e "${RED}                                      \\u25c0\\u2500 (z) \u2500\u2500\u2500\u2500 (x) \u2500\\u25b6 ${NC}"
-  echo ""
-  echo -e "${RED}${nome}${NC}"
+  #echo ""
+  #echo -e "${RED}${nome}${NC}"
 }
 
 
@@ -417,7 +416,6 @@ function status_bar
     echo -ne " "
   done
 
-  echo ""
 }
 
 main "$@"; exit

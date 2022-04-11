@@ -26,10 +26,11 @@ pessoa="pessoa"
 if [ $QUESTION = 1 ]
 then
   # ;; soma15: Carta Mesa -> Carta
-  echo -e "\nCONSTANTES:\n"
+  echo -en "CONSTANTES:\t"
+
   check-have-n "\(define.*(make-pessoa.*))" 20 "Pessoas"
 
-  echo -e "\nDEF DADOS:\n"
+  echo -en "DEF DADOS:\t"
 
   check-have-n ";;.*\(make-pessoa .* .* .* .* .* .*\)" 1 "make-pessoa"
   check-have-n ";;.*:${espaco}${string}" 2 "strings"
