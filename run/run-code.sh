@@ -598,8 +598,17 @@ function status_bar
   TOTAL=$2
   FB=2588
 
+
+  HALF=$(( ($WIDTH - $TOTAL) / 2 ))
+
+  echo $TOTAL
+  echo $WIDTH
+  echo $HALF
+
   echo ""
-  echo -n "                               "
+  for counter in $( seq 1 $HALF ); do
+    echo -ne " "
+  done
 
   for counter in $( seq 1 $CURRENT ); do
     echo -ne \\u$FB
@@ -607,6 +616,10 @@ function status_bar
 
   for counter in $( seq $CURRENT $(( TOTAL - 1 )) ); do
     echo -ne \\u2591
+  done
+
+  for counter in $( seq 1 $HALF ); do
+    echo -ne " "
   done
 
   echo ""
