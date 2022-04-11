@@ -68,119 +68,15 @@ function show_question
   echo -e "${RED}${nome}${NC}"
 }
 
-function check-question
-{
 
-  espaco="[ :>-]*"
-  fim="${espaco}$"
-  numero="(numero|número|number)"
-  simbolo="(simbolo|símbolo|symbol)"
-  bool="(booleano|bool|boolean|booleana)"
-  imagem="(image|imagem)"
-  string="string"
-
-  # CONTRATOS:
-
-  carta="carta${espaco}"
-  mesa="mesa${espaco}"
-  mao="(mão|mao)"
-
-  if [ $QUESTION = 1 ]
-  then
-    # ;; soma15: Carta Mesa -> Carta
-    echo -e "\nCONSTANTES:\n"
-    check-have-n "define.*make-carta" 4 "carta"
-    check-have-n "define.*make-mão" 4 "mão"
-    check-have-n "define.*make-mesa" 4 "mesa"
-    check-have-n ".*define.*CARTA-NULA.*make-carta" 1 "CARTA-NULA"
-
-    echo -e "\nDEF DADOS:\n"
-    check-have-n ";;.*:${espaco}${string}" 1 "def string"
-    check-have-n ";;.*:${espaco}${numero}" 1 "def numero"
-    check-have-n ";;.*:${espaco}carta" 7 "def carta"
-  fi
-
-  #2:
-  # contrato q2
-  if [ $QUESTION = 2 ]
-  then
-    # ;; soma15: Carta Mesa -> Carta
-    check-contrato "soma15\?" "carta carta" "${bool}"
-    check-have-n ";;.*\(soma15\?.*\).*" 2 "EXEMPLOS"
-    check-have-n ".*check-expect.*\(soma15\?.*\).*" 2 "TESTES"
-  fi
-
-
-  # contrato q2
-  if [ $QUESTION = 3 ]
-  then
-    # ;; soma15: Carta Mesa -> Carta
-    check-contrato "soma15" "carta mesa" "carta"
-    check-have-n "soma15\?" 4 "USOU A FUNÇÃO ANTERIOR"
-    check-have-n ";;.*\(soma15.*\).*" 2 "EXEMPLOS"
-    check-have-n ".*check-expect.*\(soma15.*\).*" 2 "TESTES"
-  fi
-
-  #3:
-
-
-  if [ $QUESTION = 4 ]
-  then
-    # ;; escova?: Carta Mesa -> Booleano
-    check-contrato "escova\?" "carta mesa" "${bool}"
-
-    check-ex-testes "escova\?"
-  fi
-
-  #4:
-  if [ $QUESTION = 5 ]
-  then
-    # ;; jogada-escova: Mão Mesa -> String
-
-    check-contrato "jogada-escova" "mão mesa" "${string}"
-    check-ex-testes "jogada-escova"
-    check-have "escova\?"
-
-  fi
-
-  #5:
-
-  if [ $QUESTION = 6 ]
-  then
-    # ;; seleciona-carta: Mão Mesa -> Jogada
-
-    check-contrato "seleciona-carta" "mão mesa" "jogada"
-    check-ex-testes "seleciona-carta"
-  fi
-
-
-  #6:
-
-  if [ $QUESTION = 7 ]
-  then
-    # ;; mostra-jogada: Mão Mesa -> Imagem
-
-    check-contrato "desenha-carta" "carta" "${imagem}"
-    check-have-n ";;.*\(desenha-carta.*\).*" 1 "EXEMPLOS"
-    #check-have-all-file ${files[$n]} "mostra-jogada"
-  fi
-
-  if [ $QUESTION = 8 ]
-  then
-    # ;; mostra-jogada: Mão Mesa -> Imagem
-
-    check-contrato "mostra-jogada" "${mao} mesa" "${imagem}"
-    check-have-n ";;.*\(mostra-jogada.*\).*" 1 "EXEMPLOS"
-    #check-have-all-file ${files[$n]} "mostra-jogada"
-  fi
-}
 
 function list-options
 {
-  echo -e "${RED} (r) Run${NC}"
-  echo -e "${RED} (o) Open${NC}"
-  echo -e "${RED} (p) Open original${NC}"
-  echo -e "${RED} (t) Show tail original${NC}"
+  echo -ne "${RED} (r) Run  ${NC}"
+  echo -ne "${RED} (o) Open  ${NC}"
+  echo -ne "${RED} (p) Open original  ${NC}"
+  echo -ne "${RED} (t) Show tail original  ${NC}"
+  echo -ne "${RED} (q) Quit ${NC}"
 }
 
 main() {
@@ -203,7 +99,7 @@ main() {
 
         echo ""
 
-        check-question
+        "$SCRIPTPATH"/check-lista-atual.sh "$QUESTION" "$QUESTION_FILE"
 
         echo ""
 
@@ -416,14 +312,6 @@ main() {
 }
 
 
-
-function check-ex-testes
-{
-  FNAME=$1
-  check-have-n ";;.*\(${FNAME}.*\).*" 2 "EXEMPLOS"
-  check-have-n ".*check-expect.*\(${FNAME}.*\).*" 2 "TESTES"
-}
-
 function echo-middle
 {
   CHAR=$1
@@ -457,96 +345,7 @@ function echo-n
   done
 }
 
-function check-contrato
-{
-  ATT='\e[1;30;45m'
-  OK='\033[1;32m'
-  NC='\033[0m'
 
-  file="$QUESTION_FILE"
-  FUNC_NAME="$1"
-  IN="$2"
-  OUT="$3"
-
-  #r=$(grep -i -A 1000 "$BEGIN" $file | grep -i -m 1 -B 1000 "$END" | grep "$MIDDLE")
-
-  #grep -i --color -E "$BEGIN" $file
-
-  #espaco="[ :>-]*"
-  #fim="${espaco}$"
-  espaco="[ ]*"
-  fim="${espaco}$"
-  arrow="${espaco}[-|=]*>${espaco}"
-  dots="${espaco}:${espaco}"
-
-  RIGHT="$FUNC_NAME: $IN -> $OUT"
-  STR="${FUNC_NAME}${dots}${IN}${arrow}${OUT}${fim}"
-
-  #echo "Checando contrato da função $FUNC_NAME"
-
-  r=$(grep -i -E "$STR" $file)
-
-  echo "$r" > tmp.rkt
-
-  if [ -z "$r" ]
-  then
-      echo -e "${ATT}ERRO: Contrato "$FUNC_NAME"${NC}"
-      echo -e "${ATT}Correto: "$RIGHT"${NC}"
-  else
-      echo -e "${OK}OK${NC}"
-      echo -e "${OK}************************************************************************************************${NC}"
-      pygmentize -l racket tmp.rkt
-      echo -e "${OK}************************************************************************************************${NC}"
-  fi
-}
-
-function check-have-n
-{
-  ATT='\e[1;30;45m'
-  OK='\033[1;32m'
-  NC='\033[0m'
-
-  file="$QUESTION_FILE"
-  HAVE="$1"
-  QTDE=$2
-  MSG=$3
-
-  r=$(grep -i -E "$HAVE" $file | wc -l)
-
-  #echo "TEM $r de $HAVE"
-
-  if [ $r -ge $QTDE ]
-  then
-      echo -e "${OK}TEM $r ${MSG} ${NC}"
-  else
-      echo -e "${ATT}NÃO TEM $QTDE ${MSG} TEM APENAS $r ${NC}"
-  fi
-}
-
-function check-have
-{
-  ATT='\e[1;30;45m'
-  OK='\033[1;32m'
-  NC='\033[0m'
-
-  file="$QUESTION_FILE"
-  HAVE="$1"
-
-
-  r=$(grep -i -E "$HAVE" $file)
-
-  echo "$r" > tmp.rkt
-
-  if [ -z "$r" ]
-  then
-      echo -e "${ATT}ERRO: Não tem "$HAVE"${NC}"
-  else
-      echo -e "${OK}TEM${NC}"
-      echo -e "${OK}************************************************************************************************${NC}"
-      pygmentize -l racket tmp.rkt
-      echo -e "${OK}************************************************************************************************${NC}"
-  fi
-}
 
 function check-have-all-file
 {
@@ -600,10 +399,6 @@ function status_bar
 
 
   HALF=$(( ($WIDTH - $TOTAL) / 2 ))
-
-  echo $TOTAL
-  echo $WIDTH
-  echo $HALF
 
   echo ""
   for counter in $( seq 1 $HALF ); do
