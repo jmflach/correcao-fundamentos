@@ -6,8 +6,8 @@ SCRIPTPATH=`dirname "$SCRIPT"`
 
 source "$SCRIPTPATH"/check-question.sh
 
-QUESTION=$1
-QUESTION_FILE=$2
+QUESTION="$1"
+QUESTION_FILE="$2"
 
 
 espaco="[ :>-]*"
@@ -21,17 +21,19 @@ carta="carta${espaco}"
 mesa="mesa${espaco}"
 mao="(mão|mao)"
 pessoa="pessoa"
+lds="(ListaDeStrings|ListaDeString|ListaNome|ListaDeNomes|ListaDeNome|ListaNomes)"
 
 
 if [ $QUESTION = 1 ]
 then
   # ;; soma15: Carta Mesa -> Carta
-  echo -en "CONSTANTES:\t"
+  echo -en "CONSTANTES:\n"
 
   check-have-n "\(define.*(make-pessoa.*))" 20 "Pessoas"
 
-  echo -en "DEF DADOS:\t"
+  echo -en "DEF DADOS:\n"
 
+  check-have-n "\(define-struct pessoa \(nome ano olhos altura pai mãe\)" 1 "definição original"
   check-have-n ";;.*\(make-pessoa .* .* .* .* .* .*\)" 1 "make-pessoa"
   check-have-n ";;.*:${espaco}${string}" 2 "strings"
   check-have-n ";;.*:${espaco}${numero}" 2 "numero"
@@ -46,20 +48,18 @@ if [ $QUESTION = 2 ]
 then
   # ;; soma15: Carta Mesa -> Carta
 
-  check-contrato "soma15\?" "carta carta" "${bool}"
-  check-have-n ";;.*\(soma15\?.*\).*" 2 "EXEMPLOS"
-  check-have-n ".*check-expect.*\(soma15\?.*\).*" 2 "TESTES"
+  check-contrato "altura-arvore-gen" "${pessoa}" "${numero}"
+  check-ex-testes "altura-arvore-gen"
 fi
 
 
 # contrato q2
 if [ $QUESTION = 3 ]
 then
-  # ;; soma15: Carta Mesa -> Carta
-  check-contrato "soma15" "carta mesa" "carta"
-  check-have-n "soma15\?" 4 "USOU A FUNÇÃO ANTERIOR"
-  check-have-n ";;.*\(soma15.*\).*" 2 "EXEMPLOS"
-  check-have-n ".*check-expect.*\(soma15.*\).*" 2 "TESTES"
+  #;; lista-ancentrais-olhos: Pessoa String -> ListaDeStrings
+  check-contrato "lista-ancestrais-olhos" "${pessoa} ${string}" "${lds}"
+  check-ex-testes "lista-ancestrais-olhos"
+  #check-have-n ";;.*\(.*lista-ancestrais-olhos" 2 "a"
 fi
 
 #3:
@@ -67,20 +67,20 @@ fi
 
 if [ $QUESTION = 4 ]
 then
-  # ;; escova?: Carta Mesa -> Booleano
-  check-contrato "escova\?" "carta mesa" "${bool}"
+  # ;; casal-mesmos-olhos?: Pessoa -> Booleano
+  check-contrato "casal-mesmos-olhos\?" "${pessoa}" "${bool}"
 
-  check-ex-testes "escova\?"
+  check-ex-testes "casal-mesmos-olhos\?"
 fi
 
 #4:
 if [ $QUESTION = 5 ]
 then
-  # ;; jogada-escova: Mão Mesa -> String
+  # ;; casal-mesmos-olhos: Pessoa -> String
 
-  check-contrato "jogada-escova" "mão mesa" "${string}"
-  check-ex-testes "jogada-escova"
-  check-have "escova\?"
+  check-contrato "casal-mesmos-olhos" "${pessoa}" "${string}"
+  check-ex-testes "casal-mesmos-olhos"
+  check-have-n "casal-mesmos-olhos\?" 1 "USOU A FUNÇÃO ANTERIOR"
 
 fi
 
@@ -88,8 +88,8 @@ fi
 
 if [ $QUESTION = 6 ]
 then
-  # ;; seleciona-carta: Mão Mesa -> Jogada
+  # ;; é-abp?: ABP -> Booleano
 
-  check-contrato "seleciona-carta" "mão mesa" "jogada"
-  check-ex-testes "seleciona-carta"
+  check-contrato "é-abp\?" "ABP" "${bool}"
+  check-ex-testes "é-abp\?"
 fi

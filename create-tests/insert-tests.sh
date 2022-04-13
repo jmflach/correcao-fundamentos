@@ -46,7 +46,7 @@ config=';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Incluído pelo script insert-te
 
 rkt_config=';; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname b) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp")) #f)))
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname b) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp")) #f)))
 '
 
 first_line=$(head -1 $newfilename)
@@ -64,10 +64,10 @@ case $first_line in
 		echo "$config" | cat - $TMPT > temp && mv temp $newfilename && rm $TMPT
 
 		# Deixa a configuração do aluno
-		cat $TMPH | cat - $newfilename > temp && mv temp $newfilename && rm $TMPH
+		#cat $TMPH | cat - $newfilename > temp && mv temp $newfilename && rm $TMPH
 
 		# Substitui a configuração do racket do aluno pela padrão (linguagens e pacotes)
-		#echo -e "$rkt_config" | cat - $newfilename > temp && mv temp $newfilename
+		echo -e "$rkt_config" | cat - $newfilename > temp && mv temp $newfilename
      ;;
   (*)
 		#echo "Arquivo not RKT"

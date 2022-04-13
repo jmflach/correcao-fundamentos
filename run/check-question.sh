@@ -34,7 +34,11 @@ function check-contrato
 
   #echo "Checando contrato da função $FUNC_NAME"
 
-  r=$(grep -i -E "$STR" $file)
+  r=$(grep -i -E "${STR}" $file)
+
+  #cat $file
+  #echo "$STR"
+  #echo "$r"
 
   echo "$r" > tmp.rkt
 
@@ -62,6 +66,9 @@ function check-have-n
   MSG=$3
 
   r=$(grep -i -E "$HAVE" $file | wc -l)
+
+  #echo "$HAVE"
+  #cat $file
 
   #echo "TEM $r de $HAVE"
 
