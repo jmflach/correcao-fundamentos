@@ -27,17 +27,18 @@ lds="(ListaDeStrings|ListaDeString|ListaNome|ListaDeNomes|ListaDeNome|ListaNomes
 if [ $QUESTION = 1 ]
 then
   # ;; soma15: Carta Mesa -> Carta
-  echo -en "CONSTANTES:\n"
+  #echo -en "CONSTANTES:\n"
+  echo "ok"
 
-  check-have-n "\(define.*(make-pessoa.*))" 20 "Pessoas"
+  #check-have-n "\(define.*(make-pessoa.*))" 20 "Pessoas"
 
-  echo -en "DEF DADOS:\n"
+  #echo -en "DEF DADOS:\n"
 
-  check-have-n "\(define-struct pessoa \(nome ano olhos altura pai mãe\)" 1 "definição original"
-  check-have-n ";;.*\(make-pessoa .* .* .* .* .* .*\)" 1 "make-pessoa"
-  check-have-n ";;.*:${espaco}${string}" 2 "strings"
-  check-have-n ";;.*:${espaco}${numero}" 2 "numero"
-  check-have-n ";;.*:${espaco}${pessoa}" 2 "pessoa"
+  #check-have-n "\(define-struct pessoa \(nome ano olhos altura pai mãe\)" 1 "definição original"
+  #check-have-n ";;.*\(make-pessoa .* .* .* .* .* .*\)" 1 "make-pessoa"
+  #check-have-n ";;.*:${espaco}${string}" 2 "strings"
+  #check-have-n ";;.*:${espaco}${numero}" 2 "numero"
+  #check-have-n ";;.*:${espaco}${pessoa}" 2 "pessoa"
   #check-have-n ";;.*:${espaco}${numero}" 1 "def numero"
   #check-have-n ";;.*:${espaco}carta" 7 "def carta"
 fi
