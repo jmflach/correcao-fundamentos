@@ -27,6 +27,8 @@ config=';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Incluído pelo script insert-te
 (require racket/base)
 (require racket/struct)
 (require test-engine/racket-tests)
+(require try-catch)
+(require racket/exn)
 
 ;; Namespace para determinar se funções foram definidas:
 
